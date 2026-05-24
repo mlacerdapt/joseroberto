@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>José Roberto: 10 Anos de Aventuras - Diário do Tio</title>
+    
+    <!-- Google Fonts: Outfit (títulos), Plus Jakarta Sans (texto), Caveat (caligrafia do diário) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Barra de Ferramentas Estilo Leitor de PDF (Oculta na Impressão) -->
+    <header class="pdf-toolbar">
+        <div class="pdf-toolbar-left">
+            <div class="pdf-page-nav">
+                <button class="pdf-nav-btn" id="prevPage" title="Página Anterior">◀</button>
+                <div class="pdf-page-indicator">
+                    Pág. <span id="currentPageNum">1</span> de <span id="totalPagesNum">12</span>
+                </div>
+                <button class="pdf-nav-btn" id="nextPage" title="Próxima Página">▶</button>
+            </div>
+        </div>
+        
+        <div class="pdf-toolbar-center">
+            <button class="pdf-zoom-btn" id="zoomOut" title="Diminuir Zoom">➖</button>
+            <span class="pdf-zoom-value" id="zoomValue">100%</span>
+            <button class="pdf-zoom-btn" id="zoomIn" title="Aumentar Zoom">➕</button>
+            
+            <div class="pdf-zoom-presets">
+                <button class="pdf-btn" id="fitWidth" title="Ajustar à Largura da Página">↔️ Ajustar Largura</button>
+                <button class="pdf-btn" id="fitPage" title="Ajustar à Página Inteira">↕️ Ajustar Altura</button>
+            </div>
+        </div>
+        
+        <div class="pdf-toolbar-right">
+            <button class="pdf-btn pdf-btn-primary" onclick="window.print()" title="Salvar como PDF ou Imprimir em A4">
+                🖨️ <span class="btn-text">Imprimir (A4)</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Espaço de Trabalho do Leitor de PDF -->
+    <div class="pdf-workspace">
+        
+        <!-- Indicador de Progresso / Timeline Lateral (Oculto na Impressão) -->
+        <nav class="timeline-nav" id="timelineNav">
+            <div class="timeline-line"></div>
+            <ul class="timeline-dots">
+                <li class="active" data-target="wrapper-page-cover" title="Capa"><span>Capa</span></li>
+                <li data-target="wrapper-page-year-1" title="2016"><span>2016</span></li>
+                <li data-target="wrapper-page-year-2" title="2017"><span>2017</span></li>
+                <li data-target="wrapper-page-year-3" title="2018"><span>2018</span></li>
+                <li data-target="wrapper-page-year-4" title="2019"><span>2019</span></li>
+                <li data-target="wrapper-page-year-5" title="2020"><span>2020</span></li>
+                <li data-target="wrapper-page-year-6" title="2021"><span>2021</span></li>
+                <li data-target="wrapper-page-year-7" title="2022"><span>2022</span></li>
+                <li data-target="wrapper-page-year-8" title="2023"><span>2023</span></li>
+                <li data-target="wrapper-page-year-9" title="2024"><span>2024</span></li>
+                <li data-target="wrapper-page-year-10" title="2025"><span>2025</span></li>
+                <li data-target="wrapper-page-back-cover" title="Dedicação"><span>Fim</span></li>
+            </ul>
+        </nav>
+
+        <!-- Visualizador do PDF (Fundo Cinza e Rolagem) -->
+        <main class="pdf-viewer" id="pdfViewer">
+            <div class="album-container" id="albumContainer">
+
+                <!-- ================= PÁGINA 1: CAPA ================= -->
+                <div class="page-wrapper" id="wrapper-page-cover" data-page-index="1">
+                    <section class="album-page cover-page" id="page-cover">
+                        <div class="page-content">
+                            <!-- Adesivos decorativos virtuais (estilo Scrapbook) -->
+                            <div class="sticker soccer-sticker">⚽</div>
+                            <div class="sticker bike-sticker">🚲</div>
+                            <div class="sticker handcraft-sticker">🛠️</div>
+                            <div class="sticker horse-sticker">🐴</div>
+
+                            <div class="cover-header">
+                                <p class="tagline">10 ANOS DE PARCERIA & AVENTURAS</p>
+                                <h1 class="main-title">Diário de Bordo do Tio</h1>
+                                <h2 class="sub-title">A incrível jornada de ver o <strong>José Roberto</strong> crescer</h2>
+                            </div>
+
+                            <div class="cover-photo-frame polaroid-card">
+                                <div class="tape tape-top-left"></div>
+                                <div class="tape tape-top-right"></div>
+                                <!-- Imagem principal de capa -->
+                                <img src="https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?q=80&w=800" alt="Capa - Tio e Sobrinho" class="cover-photo">
+                                <div class="polaroid-caption">Parceiros de aventura!</div>
+                            </div>
+
+                            <div class="cover-footer">
+                                <p class="handwritten">"Uma celebração dos primeiros 10 anos de risadas, tombos, conquistas e muita diversão."</p>
+                                <div class="meta-info">
+                                    <span><strong>Autor:</strong> Tio Marcelo</span>
+                                    <span><strong>Data:</strong> 24 de Maio de 2026</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- ================= PÁGINA 2: ANO 2016 (0 a 1 ano) ================= -->
+                <div class="page-wrapper" id="wrapper-page-year-1" data-page-index="2">
+                    <section class="album-page story-page" id="page-year-1" data-year="2016">
+                        <div class="page-content">
+                            <!-- Linha tracejada decorativa tipo Scrapbook -->
+                            <svg class="scrapbook-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M10,40 Q30,10 50,45 T90,55" fill="none" stroke="#d97706" stroke-dasharray="3,3" stroke-width="0.8"/></svg>
+                            
+                            <div class="page-header">
+                                <span class="page-number">01</span>
+                                <h2 class="year-title">2016: O Início da Jornada</h2>
+                                <span class="age-badge">0 a 1 ano</span>
+                            </div>
+
+                            <div class="story-grid">
+                                <div class="story-text">
+                                    <h3 class="story-headline">"O pequeno artesão de sorrisos"</h3>
+                                    <p>Lembro-me perfeitamente da primeira vez que te segurei no colo. Tão pequeno, mas já com um olhar super atento a tudo ao seu redor. Desde bebê, você já demonstrava uma curiosidade imensa em mexer nas coisas, segurar brinquedos e tentar "desmontar" chocalhos com aquelas mãozinhas gordinhas.</p>
+                                    <p class="handwritten-note">"Foi aqui que percebi que minha vida de tio seria cheia de surpresas e muita bagunça boa!"</p>
+                                    <a href="gallery.html?year=2016" class="gallery-btn online-only">📸 Galeria de 2016</a>
+                                </div>
+
+                                <div class="story-media">
+                                    <div class="media-frame polaroid-card" data-video-url="https://www.youtube.com/embed/tgbNymZ7vqY" title="Clique para assistir ao vídeo!">
+                                        <div class="tape tape-top-center"></div>
+                                        <img src="https://images.unsplash.com/photo-1519689680058-324335c77eb2?q=80&w=800" alt="José Roberto - Bebê" class="story-photo">
+                                        <div class="polaroid-caption">O início de tudo em 2016</div>
+                                        <div class="play-overlay online-only">▶️ Assistir Vídeo</div>
+                                        <div class="print-only qr-code-placeholder">
+                                            <div class="qr-box"><div class="qr-mock">📱 Scan</div></div>
+                                            <p class="qr-caption">Ver vídeo</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- ================= PÁGINA 3: ANO 2017 (1 a 2 anos) ================= -->
+                <div class="page-wrapper" id="wrapper-page-year-2" data-page-index="3">
+                    <section class="album-page story-page" id="page-year-2" data-year="2017">
+                        <div class="page-content">
+                            <svg class="scrapbook-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M5,20 Q45,30 65,10 T95,50" fill="none" stroke="#3d6a45" stroke-dasharray="3,3" stroke-width="0.8"/></svg>
+                            
+                            <div class="page-header">
+                                <span class="page-number">02</span>
+                                <h2 class="year-title">2017: Primeiros Passos e Rodinhas</h2>
+                                <span class="age-badge">1 a 2 anos</span>
+                            </div>
+
+                            <div class="story-grid">
+                                <div class="story-text">
+                                    <h3 class="story-headline">"Aventuras sobre duas rodas... ou quase!"</h3>
+                                    <p>Neste ano você aprendeu a andar firme e logo ganhou aquela sua primeira motinho/bicicleta de empurrar sem pedais. Lembro de passarmos tardes inteiras no quintal, eu correndo atrás de você enquanto você tentava acelerar com os pés no chão, fazendo barulho de motor com a boca. O amor pela velocidade começou cedo!</p>
+                                    <p class="handwritten-note">"Você já queria ir mais rápido do que as pernas aguentavam."</p>
+                                    <a href="gallery.html?year=2017" class="gallery-btn online-only">📸 Galeria de 2017</a>
+                                </div>
+
+                                <div class="story-media">
+                                    <div class="media-frame polaroid-card" data-video-url="https://www.youtube.com/embed/tgbNymZ7vqY" title="Clique para assistir ao vídeo!">
+                                        <div class="tape tape-top-center"></div>
+                                        <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=800" alt="Primeira moto de brinquedo" class="story-photo">
+                                        <div class="polaroid-caption">Acelerando no quintal em 2017</div>
+                                        <div class="play-overlay online-only">▶️ Assistir Vídeo</div>
+                                        <div class="print-only qr-code-placeholder">
+                                            <div class="qr-box"><div class="qr-mock">📱 Scan</div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- ================= PÁGINA 4: ANO 2018 (2 a 3 anos) ================= -->
+                <div class="page-wrapper" id="wrapper-page-year-3" data-page-index="4">
+                    <section class="album-page story-page" id="page-year-3" data-year="2018">
+                        <div class="page-content">
+                            <svg class="scrapbook-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M90,10 Q60,35 40,15 T10,60" fill="none" stroke="#2563eb" stroke-dasharray="3,3" stroke-width="0.8"/></svg>
+                            
+                            <div class="page-header">
+                                <span class="page-number">03</span>
+                                <h2 class="year-title">2018: Chutes Iniciais</h2>
+                                <span class="age-badge">2 a 3 anos</span>
+                            </div>
+
+                            <div class="story-grid">
+                                <div class="story-text">
+                                    <h3 class="story-headline">"O nascimento do pequeno craque"</h3>
+                                    <p>Qualquer objeto redondo virava bola na sua frente. Foi nessa época que te dei a sua primeira bola de futebol de verdade. Seus olhinhos brilharam. Passamos horas chutando na sala (desviando dos vasos da sua mãe!) e no gramado. Você caía, levantava rindo e gritava 'GOL!' com a maior energia do mundo.</p>
+                                    <p class="handwritten-note">"Mesmo caindo em cima da bola, o sorriso nunca saía do rosto."</p>
+                                    <a href="gallery.html?year=2018" class="gallery-btn online-only">📸 Galeria de 2018</a>
+                                </div>
+
+                                <div class="story-media">
+                                    <div class="media-frame polaroid-card" data-video-url="https://www.youtube.com/embed/tgbNymZ7vqY" title="Clique para assistir ao vídeo!">
+                                        <div class="tape tape-top-center"></div>
+                                        <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=800" alt="Primeiro futebol" class="story-photo">
+                                        <div class="polaroid-caption">O pequeno artilheiro em 2018</div>
+                                        <div class="play-overlay online-only">▶️ Assistir Vídeo</div>
+                                        <div class="print-only qr-code-placeholder">
+                                            <div class="qr-box"><div class="qr-mock">📱 Scan</div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- ================= PÁGINA 5: ANO 2019 (3 a 4 anos) ================= -->
+                <div class="page-wrapper" id="wrapper-page-year-4" data-page-index="5">
+                    <section class="album-page story-page" id="page-year-4" data-year="2019">
+                        <div class="page-content">
+                            <svg class="scrapbook-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M10,80 Q50,90 40,40 T90,20" fill="none" stroke="#d97706" stroke-dasharray="3,3" stroke-width="0.8"/></svg>
+                            
+                            <div class="page-header">
+                                <span class="page-number">04</span>
+                                <h2 class="year-title">2019: O Menino Criativo</h2>
+                                <span class="age-badge">3 a 4 anos</span>
+                            </div>
+
+                            <div class="story-grid">
+                                <div class="story-text">
+                                    <h3 class="story-headline">"Construindo sonhos com as próprias mãos"</h3>
+                                    <p>Neste ano, os brinquedos de encaixar e blocos de montar viraram seus maiores companheiros. Mas o mais legal era te ver tentar consertar as coisas com as chaves de fenda plásticas. Você olhava atentamente quando eu usava alguma ferramenta real e tentava imitar cada gesto, mostrando seu lado criador.</p>
+                                    <p class="handwritten-note">"Sua mente inventiva já estava a todo vapor, criando torres e pontes malucas."</p>
+                                    <a href="gallery.html?year=2019" class="gallery-btn online-only">📸 Galeria de 2019</a>
+                                </div>
+
+                                <div class="story-media">
+                                    <div class="media-frame polaroid-card" data-video-url="https://www.youtube.com/embed/tgbNymZ7vqY" title="Clique para assistir ao vídeo!">
+                                        <div class="tape tape-top-center"></div>
+                                        <img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?q=80&w=800" alt="Montando blocos" class="story-photo">
+                                        <div class="polaroid-caption">Grande inventor no ano de 2019</div>
+                                        <div class="play-overlay online-only">▶️ Assistir Vídeo</div>
+                                        <div class="print-only qr-code-placeholder">
+                                            <div class="qr-box"><div class="qr-mock">📱 Scan</div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- ================= PÁGINA 6: ANO 2020 (4 a 5 anos) ================= -->
+                <div class="page-wrapper" id="wrapper-page-year-5" data-page-index="6">
+                    <section class="album-page story-page" id="page-year-5" data-year="2020">
+                        <div class="page-content">
+                            <svg class="scrapbook-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M10,20 Q50,0 60,60 T90,80" fill="none" stroke="#3d6a45" stroke-dasharray="3,3" stroke-width="0.8"/></svg>
+                            
+                            <div class="page-header">
+                                <span class="page-number">05</span>
+                                <h2 class="year-title">2020: O Primeiro Cavalo</h2>
+                                <span class="age-badge">4 a 5 anos</span>
+                            </div>
+
+                            <div class="story-grid">
+                                <div class="story-text">
+                                    <h3 class="story-headline">"O pequeno e destemido cowboy"</h3>
+                                    <p>Lembro do seu fascínio quando fomos ao sítio e você viu um cavalo de perto. Muitos meninos da sua idade teriam medo daquele animal gigante, mas você queria logo passar a mão e montar. Com minha ajuda, você subiu no selim e abriu um sorriso de orelha a orelha. A conexão com os animais foi imediata.</p>
+                                    <p class="handwritten-note">"Coragem nunca faltou para esse pequeno cavaleiro!"</p>
+                                    <a href="gallery.html?year=2020" class="gallery-btn online-only">📸 Galeria de 2020</a>
+                                </div>
+
+                                <div class="story-media">
+                                    <div class="media-frame polaroid-card" data-video-url="https://www.youtube.com/embed/tgbNymZ7vqY" title="Clique para assistir ao vídeo!">
+                                        <div class="tape tape-top-center"></div>
+                                        <img src="https://images.unsplash.com/photo-1553285991-4c74211f5094?q=80&w=800" alt="Primeiro contato com cavalos" class="story-photo">
+                                        <div class="polaroid-caption">Galopando sem medo em 2020</div>
+                                        <div class="play-overlay online-only">▶️ Assistir Vídeo</div>
+                                        <div class="print-only qr-code-placeholder">
+                                            <div class="qr-box"><div class="qr-mock">📱 Scan</div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- ================= PÁGINA 7: ANO 2021 (5 a 6 anos) ================= -->
+                <div class="page-wrapper" id="wrapper-page-year-6" data-page-index="7">
+                    <section class="album-page story-page" id="page-year-6" data-year="2021">
+                        <div class="page-content">
+                            <svg class="scrapbook-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M5,40 Q50,60 50,15 T95,60" fill="none" stroke="#2563eb" stroke-dasharray="3,3" stroke-width="0.8"/></svg>
+                            
+                            <div class="page-header">
+                                <span class="page-number">06</span>
+                                <h2 class="year-title">2021: Duas Rodas Sem Rodinhas</h2>
+                                <span class="age-badge">5 a 6 anos</span>
+                            </div>
+
+                            <div class="story-grid">
+                                <div class="story-text">
+                                    <h3 class="story-headline">"O grande salto para a liberdade"</h3>
+                                    <p>Chegou o grande dia de tirar as rodinhas laterais da sua bicicleta. Corri segurando no seu banco por alguns metros, dizendo 'continua pedala, continua!' até que soltei. Quando você percebeu que estava equilibrando sozinho, soltou um grito de vitória. Um marco clássico da infância que tive a honra de presenciar.</p>
+                                    <p class="handwritten-note">"O vento no rosto e a sensação de voar sobre duas rodas."</p>
+                                    <a href="gallery.html?year=2021" class="gallery-btn online-only">📸 Galeria de 2021</a>
+                                </div>
+
+                                <div class="story-media">
+                                    <div class="media-frame polaroid-card" data-video-url="https://www.youtube.com/embed/tgbNymZ7vqY" title="Clique para assistir ao vídeo!">
+                                        <div class="tape tape-top-center"></div>
+                                        <img src="https://images.unsplash.com/photo-1485546246426-74dc88dec4d9?q=80&w=800" alt="Andando de bike" class="story-photo">
+                                        <div class="polaroid-caption">Primeira corrida solo em 2021</div>
+                                        <div class="play-overlay online-only">▶️ Assistir Vídeo</div>
+                                        <div class="print-only qr-code-placeholder">
+                                            <div class="qr-box"><div class="qr-mock">📱 Scan</div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- ================= PÁGINA 8: ANO 2022 (6 a 7 anos) ================= -->
+                <div class="page-wrapper" id="wrapper-page-year-7" data-page-index="8">
+                    <section class="album-page story-page" id="page-year-7" data-year="2022">
+                        <div class="page-content">
+                            <svg class="scrapbook-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M10,80 Q30,40 60,60 T90,20" fill="none" stroke="#d97706" stroke-dasharray="3,3" stroke-width="0.8"/></svg>
+                            
+                            <div class="page-header">
+                                <span class="page-number">07</span>
+                                <h2 class="year-title">2022: O Estádio e a Emoção</h2>
+                                <span class="age-badge">6 a 7 anos</span>
+                            </div>
+
+                            <div class="story-grid">
+                                <div class="story-text">
+                                    <h3 class="story-headline">"O amor pelo jogo ganha proporções gigantes"</h3>
+                                    <p>Nesse ano sua paixão pelo futebol atingiu outro nível. Passamos a acompanhar jogos juntos e a vibrar de verdade. Sua habilidade com a bola nos pés também cresceu demais, treinando dribles rápidos e chutes colocados. Ver você jogando com a sua camisa favorita é um dos meus orgulhos semanais.</p>
+                                    <p class="handwritten-note">"O futebol se tornou nossa linguagem secreta de comemoração."</p>
+                                    <a href="gallery.html?year=2022" class="gallery-btn online-only">📸 Galeria de 2022</a>
+                                </div>
+
+                                <div class="story-media">
+                                    <div class="media-frame polaroid-card" data-video-url="https://www.youtube.com/embed/tgbNymZ7vqY" title="Clique para assistir ao vídeo!">
+                                        <div class="tape tape-top-center"></div>
+                                        <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=800" alt="Partida de futebol" class="story-photo">
+                                        <div class="polaroid-caption">Vibração em campo no ano 2022</div>
+                                        <div class="play-overlay online-only">▶️ Assistir Vídeo</div>
+                                        <div class="print-only qr-code-placeholder">
+                                            <div class="qr-box"><div class="qr-mock">📱 Scan</div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- ================= PÁGINA 9: ANO 2023 (7 a 8 anos) ================= -->
+                <div class="page-wrapper" id="wrapper-page-year-8" data-page-index="9">
+                    <section class="album-page story-page" id="page-year-8" data-year="2023">
+                        <div class="page-content">
+                            <svg class="scrapbook-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M5,15 Q35,45 65,30 T95,85" fill="none" stroke="#3d6a45" stroke-dasharray="3,3" stroke-width="0.8"/></svg>
+                            
+                            <div class="page-header">
+                                <span class="page-number">08</span>
+                                <h2 class="year-title">2023: Acelerando a Imaginação</h2>
+                                <span class="age-badge">7 a 8 anos</span>
+                            </div>
+
+                            <div class="story-grid">
+                                <div class="story-text">
+                                    <h3 class="story-headline">"O ronco do motor nos olhos de quem sonha"</h3>
+                                    <p>Seja em carrinhos elétricos ou vendo motos passando na rua, você sempre ficava paralisado ouvindo o barulho e analisando as rodas. Quando te coloquei sentado na moto de verdade de um amigo (desligada, claro!), você segurou o guidão com uma firmeza de quem nasceu para pilotar. Um dia vamos rodar estradas juntos!</p>
+                                    <p class="handwritten-note">"O brilho nos olhos ao sentir a força do motor na imaginação."</p>
+                                    <a href="gallery.html?year=2023" class="gallery-btn online-only">📸 Galeria de 2023</a>
+                                </div>
+
+                                <div class="story-media">
+                                    <div class="media-frame polaroid-card" data-video-url="https://www.youtube.com/embed/tgbNymZ7vqY" title="Clique para assistir ao vídeo!">
+                                        <div class="tape tape-top-center"></div>
+                                        <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=800" alt="Moto e aventura" class="story-photo">
+                                        <div class="polaroid-caption">Sonhando com o asfalto em 2023</div>
+                                        <div class="play-overlay online-only">▶️ Assistir Vídeo</div>
+                                        <div class="print-only qr-code-placeholder">
+                                            <div class="qr-box"><div class="qr-mock">📱 Scan</div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- ================= PÁGINA 10: ANO 2024 (8 a 9 anos) ================= -->
+                <div class="page-wrapper" id="wrapper-page-year-9" data-page-index="10">
+                    <section class="album-page story-page" id="page-year-9" data-year="2024">
+                        <div class="page-content">
+                            <svg class="scrapbook-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M90,90 Q50,60 50,20 T10,10" fill="none" stroke="#2563eb" stroke-dasharray="3,3" stroke-width="0.8"/></svg>
+                            
+                            <div class="page-header">
+                                <span class="page-number">09</span>
+                                <h2 class="year-title">2024: O Grande Inventor</h2>
+                                <span class="age-badge">8 a 9 anos</span>
+                            </div>
+
+                            <div class="story-grid">
+                                <div class="story-text">
+                                    <h3 class="story-headline">"Mãos à obra e criatividade sem limites"</h3>
+                                    <p>Com papelão, fita adesiva, pedaços de madeira e tudo o que encontrava pela frente, você começou a criar brinquedos reais e engenhocas funcionais. Projetou mini rampa de skate, fez espadas e escudos detalhados. Ver sua habilidade manual se desenvolvendo foi incrível. Você é um fazedor nato.</p>
+                                    <p class="handwritten-note">"Criar com as mãos é dar vida à imaginação."</p>
+                                    <a href="gallery.html?year=2024" class="gallery-btn online-only">📸 Galeria de 2024</a>
+                                </div>
+
+                                <div class="story-media">
+                                    <div class="media-frame polaroid-card" data-video-url="https://www.youtube.com/embed/tgbNymZ7vqY" title="Clique para assistir ao vídeo!">
+                                        <div class="tape tape-top-center"></div>
+                                        <img src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?q=80&w=800" alt="Artesanato infantil" class="story-photo">
+                                        <div class="polaroid-caption">Fazendo arte com papelão em 2024</div>
+                                        <div class="play-overlay online-only">▶️ Assistir Vídeo</div>
+                                        <div class="print-only qr-code-placeholder">
+                                            <div class="qr-box"><div class="qr-mock">📱 Scan</div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- ================= PÁGINA 11: ANO 2025 (9 a 10 anos) ================= -->
+                <div class="page-wrapper" id="wrapper-page-year-10" data-page-index="11">
+                    <section class="album-page story-page" id="page-year-10" data-year="2025">
+                        <div class="page-content">
+                            <svg class="scrapbook-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M10,20 Q40,50 60,15 T95,45" fill="none" stroke="#d97706" stroke-dasharray="3,3" stroke-width="0.8"/></svg>
+                            
+                            <div class="page-header">
+                                <span class="page-number">10</span>
+                                <h2 class="year-title">2025: Celebrando uma Década</h2>
+                                <span class="age-badge">9 a 10 anos</span>
+                            </div>
+
+                            <div class="story-grid">
+                                <div class="story-text">
+                                    <h3 class="story-headline">"Os primeiros 10 anos de uma vida incrível"</h3>
+                                    <p>Chegamos à marca de 10 anos! A primeira década completa de vida, e que privilégio enorme foi te acompanhar de pertinho em cada uma dessas etapas. Hoje você é um menino ativo, apaixonado por esportes, que adora inventar coisas e tem um coração gigante. Mal posso esperar pelas próximas aventuras.</p>
+                                    <p class="handwritten-note">"Parabéns, meu sobrinho, parceiro e eterno aventureiro!"</p>
+                                    <a href="gallery.html?year=2025" class="gallery-btn online-only">📸 Galeria de 2025</a>
+                                </div>
+
+                                <div class="story-media">
+                                    <div class="media-frame polaroid-card" data-video-url="https://www.youtube.com/embed/tgbNymZ7vqY" title="Clique para assistir ao vídeo!">
+                                        <div class="tape tape-top-center"></div>
+                                        <img src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?q=80&w=800" alt="Aniversário de 10 anos" class="story-photo">
+                                        <div class="polaroid-caption">10 Anos de muita festa em 2025</div>
+                                        <div class="play-overlay online-only">▶️ Assistir Vídeo</div>
+                                        <div class="print-only qr-code-placeholder">
+                                            <div class="qr-box"><div class="qr-mock">📱 Scan</div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- ================= PÁGINA 12: CONTRACAPA ================= -->
+                <div class="page-wrapper" id="wrapper-page-back-cover" data-page-index="12">
+                    <section class="album-page back-cover" id="page-back-cover">
+                        <div class="page-content">
+                            <div class="back-cover-decoration">🌲🚴‍♂️⚽🛠️🐎</div>
+                            
+                            <h2 class="back-title">Para o José Roberto, com amor</h2>
+                            
+                            <div class="back-message">
+                                <p class="handwritten">"José, nunca perca essa sua curiosidade insaciável, sua energia ao chutar uma bola, sua coragem ao subir numa bike ou a criatividade de criar mundos inteiros com suas próprias mãos. Estarei sempre aqui na primeira fila para te ver vencer, cair, levantar e acelerar rumo aos seus sonhos."</p>
+                                <p class="handwritten-sig">De seu tio e maior fã,<br><strong>Tio Marcelo</strong></p>
+                            </div>
+
+                            <!-- Selo de autenticação de aventura -->
+                            <div class="adventure-seal">
+                                <div class="seal-inner">
+                                    <span>★ CERTIFICADO DE ★</span>
+                                    <strong>PARCEIRO DE AVENTURAS</strong>
+                                    <span>DEZ ANOS COMPLETOS</span>
+                                </div>
+                            </div>
+
+                            <div class="back-footer">
+                                <p>Feito à mão digitalmente por Tio Marcelo em comemoração aos 10 anos do José Roberto. Impresso em formato A4 Retrato oficial.</p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Vídeo Interativo (Oculto por padrão) -->
+    <div class="video-modal" id="videoModal">
+        <div class="video-modal-backdrop" id="videoModalBackdrop"></div>
+        <div class="video-modal-content">
+            <button class="video-modal-close" id="closeModal" title="Fechar Vídeo">&times;</button>
+            <div class="video-modal-iframe-container">
+                <iframe id="modalIframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

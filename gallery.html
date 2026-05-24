@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeria de Fotos - Diário de Bordo do José Roberto</title>
+    
+    <!-- Google Fonts: Outfit, Plus Jakarta Sans, Caveat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="gallery-page-body">
+
+    <!-- Fitas decorativas de fundo tipo scrapbook -->
+    <div class="gallery-decor-tape tape-top-left"></div>
+    <div class="gallery-decor-tape tape-top-right"></div>
+
+    <div class="gallery-layout-container">
+        
+        <!-- Cabeçalho Scrapbook -->
+        <header class="gallery-header">
+            <div class="gallery-header-left">
+                <a href="index.html" id="backLink" class="gallery-back-btn">
+                    <span class="back-arrow">◀</span> Voltar ao Álbum
+                </a>
+            </div>
+            
+            <div class="gallery-header-center">
+                <div class="gallery-title-box">
+                    <span class="gallery-vintage-tag" id="ageBadge">0 a 0 anos</span>
+                    <h1 class="gallery-main-title">Galeria de Lembranças <span id="galleryYear">2016</span></h1>
+                    <p class="gallery-subtitle" id="gallerySubtitle">Lembranças incríveis deste ano especial</p>
+                </div>
+            </div>
+            
+            <div class="gallery-header-right">
+                <div class="gallery-stamp">★ JOSÉ ROBERTO ★</div>
+            </div>
+        </header>
+
+        <!-- Área de Conteúdo da Galeria (Mural de Fotos) -->
+        <main class="gallery-workspace">
+            <div class="gallery-board">
+                
+                <!-- Feedback de Carregamento -->
+                <div id="galleryLoading" class="gallery-state-message">
+                    <div class="spinner"></div>
+                    <p>Vasculhando o baú de memórias...</p>
+                </div>
+
+                <!-- Feedback de Galeria Vazia -->
+                <div id="galleryEmpty" class="gallery-state-message" style="display: none;">
+                    <div class="empty-icon">📁📭</div>
+                    <h3>Esta galeria está vazia!</h3>
+                    <p>Para exibir suas fotos aqui, coloque os arquivos de imagem dentro da pasta:</p>
+                    <code class="folder-path" id="folderPathDisplay">photos/2016/</code>
+                    <p class="empty-tips">Nomeie os arquivos sequencialmente como: <strong>1.jpg</strong>, <strong>2.jpg</strong>, <strong>3.png</strong>, etc.</p>
+                </div>
+
+                <!-- Grade de Fotos Polaroid -->
+                <div id="galleryGrid" class="gallery-grid" style="display: none;">
+                    <!-- Preenchido via Javascript -->
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Barra de Ações Flutuante (Seleção de Fotos) -->
+    <div id="actionBar" class="gallery-action-bar" style="display: none;">
+        <div class="action-bar-content">
+            <div class="action-bar-left">
+                <span class="selection-count">
+                    📍 <strong id="selectedCount">0</strong> fotos selecionadas
+                </span>
+            </div>
+            <div class="action-bar-right">
+                <button id="copyNamesBtn" class="gallery-action-btn copy-btn" title="Copiar lista de nomes das imagens selecionadas">
+                    📋 Copiar Nomes das Selecionadas
+                </button>
+                <button id="clearSelectionBtn" class="gallery-action-btn clear-btn">
+                    🗑️ Limpar Seleção
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox Modal (Visualizador de Fotos Ampliadas) -->
+    <div id="lightbox" class="gallery-lightbox">
+        <div class="lightbox-backdrop" id="lightboxBackdrop"></div>
+        
+        <button class="lightbox-close" id="lightboxClose" title="Fechar Visualizador">&times;</button>
+        
+        <button class="lightbox-nav nav-prev" id="lightboxPrev" title="Foto Anterior">&#10094;</button>
+        <button class="lightbox-nav nav-next" id="lightboxNext" title="Próxima Foto">&#10095;</button>
+
+        <div class="lightbox-content">
+            <div class="lightbox-polaroid">
+                <div class="lightbox-image-container">
+                    <img id="lightboxImg" src="" alt="Imagem Ampliada">
+                </div>
+                <div class="lightbox-footer">
+                    <span class="lightbox-caption" id="lightboxCaption">Foto 1</span>
+                    <span class="lightbox-counter" id="lightboxCounter">1 de X</span>
+                </div>
+            </div>
+            
+            <!-- Controle de Seleção no Lightbox -->
+            <button id="lightboxSelectBtn" class="lightbox-select-btn">
+                <span class="select-icon">🤍</span> <span class="select-text">Selecionar Foto</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts de Lógica da Galeria -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // 1. Extrai o ano dos parâmetros da URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const year = parseInt(urlParams.get("year")) || 2016;
+            
+            // Valida ano (entre 2016 e 2025)
+            const validYear = Math.max(2016, Math.min(2025, year));
+            const yearIndex = validYear - 2015; // 2016 -> 1, 2017 -> 2...
+
+            // Elementos DOM
+            const galleryYearEl = document.getElementById("galleryYear");
+            const ageBadgeEl = document.getElementById("ageBadge");
+            const gallerySubtitleEl = document.getElementById("gallerySubtitle");
+            const backLinkEl = document.getElementById("backLink");
+            const folderPathDisplayEl = document.getElementById("folderPathDisplay");
+            const galleryLoadingEl = document.getElementById("galleryLoading");
+            const galleryEmptyEl = document.getElementById("galleryEmpty");
+            const galleryGridEl = document.getElementById("galleryGrid");
+            
+            const actionBarEl = document.getElementById("actionBar");
+            const selectedCountEl = document.getElementById("selectedCount");
+            const copyNamesBtn = document.getElementById("copyNamesBtn");
+            const clearSelectionBtn = document.getElementById("clearSelectionBtn");
+
+            const lightboxEl = document.getElementById("lightbox");
+            const lightboxImgEl = document.getElementById("lightboxImg");
+            const lightboxCaptionEl = document.getElementById("lightboxCaption");
+            const lightboxCounterEl = document.getElementById("lightboxCounter");
+            const lightboxSelectBtn = document.getElementById("lightboxSelectBtn");
+            const lightboxCloseBtn = document.getElementById("lightboxClose");
+            const lightboxBackdropEl = document.getElementById("lightboxBackdrop");
+            const lightboxPrevBtn = document.getElementById("lightboxPrev");
+            const lightboxNextBtn = document.getElementById("lightboxNext");
+
+            // Configurar Cabeçalho e Metadados
+            galleryYearEl.textContent = validYear;
+            backLinkEl.href = `index.html#wrapper-page-year-${yearIndex}`;
+            folderPathDisplayEl.textContent = `photos/${validYear}/`;
+
+            // Mapeamento de idades e histórias da capa
+            const yearMetadata = {
+                2016: { age: "0 a 1 ano", desc: "O Início da Jornada - O pequeno artesão de sorrisos" },
+                2017: { age: "1 a 2 anos", desc: "Primeiros Passos e Rodinhas - Aventuras no quintal" },
+                2018: { age: "2 a 3 anos", desc: "Chutes Iniciais - O nascimento do pequeno craque" },
+                2019: { age: "3 a 4 anos", desc: "O Menino Criativo - Construindo sonhos e blocos" },
+                2020: { age: "4 a 5 anos", desc: "O Primeiro Cavalo - O pequeno e destemido cowboy" },
+                2021: { age: "5 a 6 anos", desc: "Duas Rodas Sem Rodinhas - Grande salto para a liberdade" },
+                2022: { age: "6 a 7 anos", desc: "O Estádio e a Emoção - O amor pelo futebol gigante" },
+                2023: { age: "7 a 8 anos", desc: "Acelerando a Imaginação - Sonhando com o asfalto" },
+                2024: { age: "8 a 9 anos", desc: "O Grande Inventor - Mãos à obra e engenhos de papelão" },
+                2025: { age: "9 a 10 anos", desc: "Celebrando uma Década - Dez anos de aventuras incríveis" }
+            };
+
+            const meta = yearMetadata[validYear] || { age: "10 Anos", desc: "Álbum de Aventuras" };
+            ageBadgeEl.textContent = meta.age;
+            gallerySubtitleEl.textContent = meta.desc;
+
+            // Chave do localStorage para salvar as fotos selecionadas deste ano
+            const storageKey = `selected_photos_${validYear}`;
+            let selectedPhotos = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+            // Estado da galeria
+            let loadedImages = []; // Array de strings com caminhos das imagens
+            let activeLightboxIndex = 0;
+
+            // ==========================================================================
+            // 2. SISTEMA DE VERIFICAÇÃO DE IMAGEM DYNAMIC (CLIENT-SIDE ERROR HANDLERS)
+            // ==========================================================================
+            
+            function checkImageExists(url) {
+                return new Promise((resolve) => {
+                    const img = new Image();
+                    img.onload = () => resolve(true);
+                    img.onerror = () => resolve(false);
+                    img.src = url;
+                });
+            }
+
+            async function scanAndLoadPhotos() {
+                const extensions = ["jpg", "jpeg", "png", "webp", "JPG", "JPEG", "PNG", "WEBP"];
+                let index = 1;
+                let foundAny = false;
+                
+                // Procuramos até 60 fotos (um limite seguro)
+                while (index <= 60) {
+                    let foundForIndex = false;
+                    let matchedUrl = "";
+                    
+                    // Testa cada extensão sequencialmente
+                    for (const ext of extensions) {
+                        const testUrl = `photos/${validYear}/${index}.${ext}`;
+                        const exists = await checkImageExists(testUrl);
+                        if (exists) {
+                            matchedUrl = testUrl;
+                            foundForIndex = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!foundForIndex) {
+                        // Não há mais fotos sequenciais para este ano, encerra a busca
+                        break;
+                    }
+                    
+                    // Armazena a imagem encontrada
+                    loadedImages.push(matchedUrl);
+                    addPhotoToGrid(matchedUrl, index);
+                    foundAny = true;
+                    index++;
+                }
+
+                // Ocultar carregando
+                galleryLoadingEl.style.display = "none";
+                
+                if (foundAny) {
+                    galleryGridEl.style.display = "grid";
+                    updateSelectionUI();
+                } else {
+                    galleryEmptyEl.style.display = "block";
+                }
+            }
+
+            // ==========================================================================
+            // 3. CONSTRUTOR DE CARD POLAROID NO GRID
+            // ==========================================================================
+            
+            function addPhotoToGrid(url, index) {
+                const filename = url.substring(url.lastIndexOf("/") + 1);
+                const isSelected = selectedPhotos.includes(filename);
+                
+                // Sorteia uma leve rotação para dar um clima real de Scrapbook/Mural
+                const rotation = (Math.random() * 6 - 3).toFixed(1);
+                
+                const card = document.createElement("div");
+                card.className = `gallery-polaroid-card ${isSelected ? "selected" : ""}`;
+                card.style.transform = `rotate(${rotation}deg)`;
+                card.setAttribute("data-filename", filename);
+                card.setAttribute("data-index", index - 1);
+                
+                card.innerHTML = `
+                    <div class="gallery-tape"></div>
+                    <div class="gallery-photo-container">
+                        <img src="${url}" alt="Foto ${index}" loading="lazy">
+                        <div class="gallery-select-badge">❤️</div>
+                    </div>
+                    <div class="gallery-polaroid-footer">
+                        <span class="gallery-photo-caption">Foto ${index}</span>
+                        <div class="gallery-card-checkbox" title="Selecionar Memória">
+                            <input type="checkbox" ${isSelected ? "checked" : ""} class="card-checkbox">
+                        </div>
+                    </div>
+                `;
+
+                // Evento 1: Clique na foto ou caption (abre Lightbox)
+                const imgContainer = card.querySelector(".gallery-photo-container");
+                const caption = card.querySelector(".gallery-photo-caption");
+                
+                [imgContainer, caption].forEach(el => {
+                    el.addEventListener("click", (e) => {
+                        // Ignora se o clique for na badge
+                        if (e.target.classList.contains("gallery-select-badge")) return;
+                        
+                        activeLightboxIndex = index - 1;
+                        openLightbox();
+                    });
+                });
+
+                // Evento 2: Clique no checkbox para seleção
+                const checkbox = card.querySelector(".card-checkbox");
+                checkbox.addEventListener("change", (e) => {
+                    togglePhotoSelection(filename);
+                });
+                
+                // Evento 3: Clique no coração da badge para desmarcar
+                const badge = card.querySelector(".gallery-select-badge");
+                badge.addEventListener("click", () => {
+                    togglePhotoSelection(filename);
+                });
+
+                galleryGridEl.appendChild(card);
+            }
+
+            // ==========================================================================
+            // 4. LÓGICA DE SELEÇÃO E PERSISTÊNCIA
+            // ==========================================================================
+            
+            function togglePhotoSelection(filename) {
+                const idx = selectedPhotos.indexOf(filename);
+                if (idx > -1) {
+                    selectedPhotos.splice(idx, 1);
+                } else {
+                    selectedPhotos.push(filename);
+                }
+                
+                // Persiste
+                localStorage.setItem(storageKey, JSON.stringify(selectedPhotos));
+                
+                // Atualiza a visualização do card correspondente
+                const card = document.querySelector(`.gallery-polaroid-card[data-filename="${filename}"]`);
+                if (card) {
+                    const isSelected = selectedPhotos.includes(filename);
+                    const checkbox = card.querySelector(".card-checkbox");
+                    
+                    if (isSelected) {
+                        card.classList.add("selected");
+                        checkbox.checked = true;
+                    } else {
+                        card.classList.remove("selected");
+                        checkbox.checked = false;
+                    }
+                }
+                
+                updateSelectionUI();
+                updateLightboxSelectButtonState();
+            }
+
+            function updateSelectionUI() {
+                const totalSelected = selectedPhotos.length;
+                selectedCountEl.textContent = totalSelected;
+                
+                if (totalSelected > 0) {
+                    actionBarEl.style.display = "block";
+                } else {
+                    actionBarEl.style.display = "none";
+                }
+            }
+
+            // Botão de Limpar Seleção
+            clearSelectionBtn.addEventListener("click", () => {
+                selectedPhotos = [];
+                localStorage.setItem(storageKey, JSON.stringify(selectedPhotos));
+                
+                // Reseta todos os cards no DOM
+                const cards = document.querySelectorAll(".gallery-polaroid-card");
+                cards.forEach(card => {
+                    card.classList.remove("selected");
+                    card.querySelector(".card-checkbox").checked = false;
+                });
+                
+                updateSelectionUI();
+                updateLightboxSelectButtonState();
+            });
+
+            // Botão de Copiar Nomes
+            copyNamesBtn.addEventListener("click", () => {
+                if (selectedPhotos.length === 0) return;
+                
+                // Ordena os arquivos numericamente para facilitar
+                const sorted = [...selectedPhotos].sort((a, b) => {
+                    const numA = parseInt(a) || 0;
+                    const numB = parseInt(b) || 0;
+                    return numA - numB;
+                });
+                
+                const namesText = sorted.join(", ");
+                
+                navigator.clipboard.writeText(namesText).then(() => {
+                    const originalText = copyNamesBtn.textContent;
+                    copyNamesBtn.textContent = "✓ Copiado com Sucesso!";
+                    copyNamesBtn.style.backgroundColor = "var(--accent-green)";
+                    
+                    setTimeout(() => {
+                        copyNamesBtn.textContent = originalText;
+                        copyNamesBtn.style.backgroundColor = "";
+                    }, 2000);
+                }).catch(err => {
+                    alert("Erro ao copiar: " + err);
+                });
+            });
+
+            // ==========================================================================
+            // 5. INTERATIVIDADE DO LIGHTBOX
+            // ==========================================================================
+            
+            function openLightbox() {
+                updateLightboxContent();
+                lightboxEl.classList.add("active");
+                document.body.style.overflow = "hidden"; // Desativa scroll da página
+            }
+
+            function closeLightbox() {
+                lightboxEl.classList.remove("active");
+                document.body.style.overflow = ""; // Reativa scroll
+            }
+
+            function updateLightboxContent() {
+                const imgUrl = loadedImages[activeLightboxIndex];
+                if (!imgUrl) return;
+                
+                const filename = imgUrl.substring(imgUrl.lastIndexOf("/") + 1);
+                
+                lightboxImgEl.src = imgUrl;
+                lightboxCaptionEl.textContent = `Foto ${activeLightboxIndex + 1} (${filename})`;
+                lightboxCounterEl.textContent = `${activeLightboxIndex + 1} de ${loadedImages.length}`;
+                
+                updateLightboxSelectButtonState();
+            }
+
+            function updateLightboxSelectButtonState() {
+                if (loadedImages.length === 0) return;
+                const imgUrl = loadedImages[activeLightboxIndex];
+                const filename = imgUrl.substring(imgUrl.lastIndexOf("/") + 1);
+                const isSelected = selectedPhotos.includes(filename);
+                
+                if (isSelected) {
+                    lightboxSelectBtn.classList.add("selected");
+                    lightboxSelectBtn.querySelector(".select-icon").textContent = "❤️";
+                    lightboxSelectBtn.querySelector(".select-text").textContent = "Foto Selecionada";
+                } else {
+                    lightboxSelectBtn.classList.remove("selected");
+                    lightboxSelectBtn.querySelector(".select-icon").textContent = "🤍";
+                    lightboxSelectBtn.querySelector(".select-text").textContent = "Selecionar Foto";
+                }
+            }
+
+            // Alternar seleção de dentro do Lightbox
+            lightboxSelectBtn.addEventListener("click", () => {
+                const imgUrl = loadedImages[activeLightboxIndex];
+                const filename = imgUrl.substring(imgUrl.lastIndexOf("/") + 1);
+                togglePhotoSelection(filename);
+            });
+
+            // Navegação no Lightbox
+            function showNextPhoto() {
+                if (loadedImages.length <= 1) return;
+                activeLightboxIndex = (activeLightboxIndex + 1) % loadedImages.length;
+                updateLightboxContent();
+            }
+
+            function showPrevPhoto() {
+                if (loadedImages.length <= 1) return;
+                activeLightboxIndex = (activeLightboxIndex - 1 + loadedImages.length) % loadedImages.length;
+                updateLightboxContent();
+            }
+
+            lightboxNextBtn.addEventListener("click", showNextPhoto);
+            lightboxPrevBtn.addEventListener("click", showPrevPhoto);
+            lightboxCloseBtn.addEventListener("click", closeLightbox);
+            lightboxBackdropEl.addEventListener("click", closeLightbox);
+
+            // Atalhos de teclado no Lightbox
+            document.addEventListener("keydown", (e) => {
+                if (!lightboxEl.classList.contains("active")) return;
+                
+                if (e.key === "Escape") {
+                    closeLightbox();
+                } else if (e.key === "ArrowRight") {
+                    showNextPhoto();
+                } else if (e.key === "ArrowLeft") {
+                    showPrevPhoto();
+                } else if (e.key === " " || e.key === "Enter") {
+                    e.preventDefault();
+                    lightboxSelectBtn.click();
+                }
+            });
+
+            // ==========================================================================
+            // 6. INICIALIZAÇÃO
+            // ==========================================================================
+            
+            scanAndLoadPhotos();
+        });
+    </script>
+</body>
+</html>

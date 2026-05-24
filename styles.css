@@ -1,0 +1,1975 @@
+/* ==========================================================================
+   SISTEMA DE DESIGN: DIÁRIO DE AVENTURAS (SCRAPBOOK PREMIUM)
+   ========================================================================== */
+
+:root {
+    /* Paleta de Cores: Aventura, Natureza e Artesanato */
+    --bg-web: #1e2522; /* Fundo escuro e imersivo online */
+    --bg-paper: #f9f6f0; /* Tom de papel envelhecido/artesanal */
+    --text-main: #2b3531; /* Verde/cinza quase preto para textos */
+    --text-light: #5a6661;
+    --accent-green: #3d6a45; /* Verde floresta/esporte */
+    --accent-orange: #d97706; /* Laranja queimado/aventura */
+    --accent-blue: #2563eb; /* Azul futebol/liberdade */
+    --accent-red: #dc2626; /* Vermelho detalhe */
+    --border-dashed: #c2bbb0;
+    --tape-color: rgba(220, 190, 140, 0.4);
+    
+    /* Fontes */
+    --font-title: 'Outfit', sans-serif;
+    --font-text: 'Plus Jakarta Sans', sans-serif;
+    --font-handwritten: 'Caveat', cursive;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-web);
+    color: var(--text-main);
+    font-family: var(--font-text);
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+/* ==========================================================================
+   CONTAINER DO ÁLBUM (LAYOUT LEITOR DE PDF PREMIUM)
+   ========================================================================== */
+
+/* Barra de Ferramentas Estilo Leitor de PDF */
+.pdf-toolbar {
+    height: 55px;
+    background-color: #323639;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 1000;
+    color: #f1f1f1;
+    font-family: var(--font-title);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+    user-select: none;
+}
+
+.pdf-toolbar-left, 
+.pdf-toolbar-center, 
+.pdf-toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pdf-toolbar-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    gap: 15px;
+}
+
+/* Botões do Leitor de PDF */
+.pdf-btn {
+    padding: 8px 14px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    color: #f1f1f1;
+    font-family: var(--font-title);
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pdf-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+}
+
+.pdf-btn:active {
+    transform: translateY(0);
+}
+
+.pdf-btn-primary {
+    background-color: var(--accent-green);
+    border-color: transparent;
+    box-shadow: 0 2px 8px rgba(61, 106, 69, 0.3);
+}
+
+.pdf-btn-primary:hover {
+    background-color: #315537;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(61, 106, 69, 0.4);
+}
+
+/* Navegação de Página */
+.pdf-page-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(0, 0, 0, 0.25);
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pdf-nav-btn {
+    background: transparent;
+    border: none;
+    color: #ccc;
+    font-size: 0.8rem;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.pdf-nav-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.pdf-page-indicator {
+    font-size: 0.85rem;
+    font-weight: 500;
+    min-width: 75px;
+    text-align: center;
+}
+
+/* Controles de Zoom */
+.pdf-zoom-btn {
+    background-color: rgba(255, 255, 255, 0.08);
+    border: none;
+    color: #fff;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.pdf-zoom-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.pdf-zoom-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    min-width: 50px;
+    text-align: center;
+}
+
+.pdf-zoom-presets {
+    display: flex;
+    gap: 8px;
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+    padding-left: 15px;
+}
+
+/* Espaço de Trabalho do PDF (Dividido em Sidebar e Viewer) */
+.pdf-workspace {
+    display: flex;
+    height: calc(100vh - 55px);
+    width: 100vw;
+    overflow: hidden;
+    position: relative;
+    background-color: #202124;
+}
+
+/* ==========================================================================
+   INTERATIVIDADE: TIMELINE LATERAL DE BOLINHAS (WEB)
+   ========================================================================== */
+
+.timeline-nav {
+    position: fixed;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1000;
+    display: flex;
+    height: 420px; /* Espaço para as 12 páginas */
+    align-items: center;
+    user-select: none;
+}
+
+.timeline-line {
+    position: absolute;
+    right: 7px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.timeline-dots {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    list-style: none;
+    padding: 0;
+}
+
+.timeline-dots li {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    border: 2px solid #202124; /* Corresponde ao fundo cinza escuro */
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.timeline-dots li:hover, .timeline-dots li.active {
+    background: var(--accent-orange);
+    transform: scale(1.3);
+    box-shadow: 0 0 10px var(--accent-orange);
+}
+
+.timeline-dots li span {
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-family: var(--font-title);
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.timeline-dots li:hover span {
+    opacity: 1;
+    visibility: visible;
+    right: 25px;
+}
+
+/* Área do Visualizador de PDF */
+.pdf-viewer {
+    flex-grow: 1;
+    overflow-y: auto;
+    height: 100%;
+    background-color: #1e1e1e; /* Fundo escuro de alto contraste para o papel */
+    padding: 30px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    scroll-behavior: smooth;
+}
+
+.album-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ==========================================================================
+   ESTRUTURA DE CADA PÁGINA (WEB VIEWPORT: PORTRAIT A4 FORMAT COM SCALING)
+   ========================================================================== */
+
+/* Wrapper da Página: Controla o tamanho de fluxo em CSS */
+.page-wrapper {
+    /* Dimensões base do A4 online multiplicadas pelo fator de zoom */
+    width: calc(794px * var(--pdf-scale, 1));
+    height: calc(1123px * var(--pdf-scale, 1));
+    margin-bottom: 40px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: width 0.1s ease, height 0.1s ease;
+    flex-shrink: 0;
+}
+
+/* Cada folha do álbum online: Tamanho estático fixo, redimensionado via CSS transform */
+.album-page {
+    width: 794px !important;
+    height: 1123px !important;
+    background-color: var(--bg-paper);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    border-radius: 6px;
+    position: absolute !important;
+    overflow: hidden;
+    padding: 55px 45px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transform: scale(var(--pdf-scale, 1));
+    transform-origin: center center;
+    transition: none; /* Evita lags durante zoom */
+    z-index: 10;
+    box-sizing: border-box !important;
+}
+
+/* Efeito de papel artesanal */
+.album-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.045"/></svg>');
+    pointer-events: none;
+    border-radius: 6px;
+}
+
+/* Linhas sutis tipo caderno/quadriculado */
+.album-page::after {
+    content: '';
+    position: absolute;
+    top: 25px;
+    left: 20px;
+    right: 20px;
+    bottom: 25px;
+    border: 1px dashed var(--border-dashed);
+    pointer-events: none;
+    border-radius: 4px;
+    z-index: 1;
+}
+
+/* ==========================================================================
+   ELEMENTOS DE DECORAÇÃO (SCRAPBOOK STYLE)
+   ========================================================================== */
+
+/* Adesivos virtuais */
+.sticker {
+    position: absolute;
+    font-size: 2.2rem;
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    border: 2px dashed #b5a48c;
+    z-index: 5;
+    user-select: none;
+    transition: transform 0.3s ease;
+}
+
+.sticker:hover {
+    transform: scale(1.15) rotate(10deg);
+}
+
+.soccer-sticker { top: 5%; right: 10%; transform: rotate(12deg); }
+.bike-sticker { top: 22%; left: 6%; transform: rotate(-15deg); }
+.handcraft-sticker { bottom: 25%; right: 8%; transform: rotate(8deg); }
+.horse-sticker { bottom: 8%; left: 10%; transform: rotate(-5deg); }
+
+/* Fitas adesivas decorativas (Washi Tape) */
+.tape {
+    position: absolute;
+    width: 90px;
+    height: 25px;
+    background-color: var(--tape-color);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transform: rotate(-12deg);
+    z-index: 10;
+    backdrop-filter: blur(1px);
+}
+
+.tape::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; left: -5px; right: -5px;
+    border-left: 4px dotted var(--bg-paper);
+    border-right: 4px dotted var(--bg-paper);
+}
+
+.tape-top-left { top: -12px; left: -25px; transform: rotate(-35deg); }
+.tape-top-right { top: -12px; right: -25px; transform: rotate(35deg); }
+
+/* Alfinete / Pin */
+.pin {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 14px;
+    height: 14px;
+    background-color: var(--accent-red);
+    border-radius: 50%;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    z-index: 10;
+}
+.pin::after {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 6px;
+    width: 2px;
+    height: 8px;
+    background: #ccc;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+/* ==========================================================================
+   CONTEÚDO DA CAPA
+   ========================================================================== */
+
+.cover-page {
+    text-align: center;
+    padding: 40px 30px;
+}
+
+.cover-header {
+    margin-bottom: 25px;
+}
+
+.tagline {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    color: var(--accent-orange);
+    margin-bottom: 8px;
+}
+
+.main-title {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 2.8rem;
+    color: var(--accent-green);
+    line-height: 1.1;
+    margin-bottom: 8px;
+    text-shadow: 1px 1px 0px #fff, 2px 2px 0px #dcd5c9;
+}
+
+.sub-title {
+    font-family: var(--font-text);
+    font-weight: 400;
+    font-size: 1.15rem;
+    color: var(--text-light);
+}
+
+.sub-title strong {
+    color: var(--accent-green);
+    font-weight: 600;
+}
+
+.cover-photo-frame {
+    position: relative;
+    width: 90%;
+    max-width: 280px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 12px 12px 35px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    border-radius: 4px;
+    transform: rotate(-2deg);
+    transition: transform 0.4s ease;
+    z-index: 2;
+}
+
+.cover-photo-frame:hover {
+    transform: rotate(1deg) scale(1.03);
+}
+
+.cover-photo {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 2px;
+    border: 1px solid #eee;
+}
+
+.cover-footer {
+    margin-top: 25px;
+}
+
+.handwritten {
+    font-family: var(--font-handwritten);
+    font-size: 1.8rem;
+    color: var(--accent-green);
+    margin-bottom: 12px;
+    line-height: 1.2;
+}
+
+.meta-info {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-family: var(--font-title);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ==========================================================================
+   CONTEÚDO DAS PÁGINAS DE HISTÓRIA
+   ========================================================================== */
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px dashed var(--border-dashed);
+    padding-bottom: 6px;
+    margin-bottom: 20px;
+    z-index: 2;
+}
+
+.page-number {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: var(--accent-orange);
+}
+
+.year-title {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: var(--accent-green);
+}
+
+.age-badge {
+    background-color: var(--accent-green);
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-family: var(--font-title);
+}
+
+/* Grid de História em Coluna Única (Ideal para Portrait A4) */
+.story-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex-grow: 1;
+    justify-content: space-between;
+    z-index: 2;
+}
+
+.story-text {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 0.95rem;
+    color: var(--text-main);
+    text-align: justify;
+}
+
+.story-headline {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: var(--accent-orange);
+    line-height: 1.2;
+    margin-bottom: 3px;
+}
+
+.handwritten-note {
+    font-family: var(--font-handwritten);
+    font-size: 1.6rem;
+    color: #3b5c46;
+    margin-top: 8px;
+    line-height: 1.2;
+    border-left: 3px solid var(--accent-orange);
+    padding-left: 12px;
+    text-align: left;
+}
+
+.story-media {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Moldura Polaroid para Fotos/Vídeos (Estilo Collage Scrapbook) */
+.media-frame, .cover-photo-frame {
+    position: relative;
+    background: #fff;
+    padding: 10px 10px 38px !important; /* Mais padding inferior para a legenda */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05), 0 10px 25px rgba(0,0,0,0.12);
+    border-radius: 2px;
+    transform: rotate(2.5deg);
+    width: 100%;
+    max-width: 260px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.cover-photo-frame {
+    transform: rotate(-2.5deg);
+    margin: 0 auto 20px;
+}
+
+.media-frame:hover, .cover-photo-frame:hover {
+    transform: scale(1.04) rotate(-0.5deg);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 20px 40px rgba(0,0,0,0.2);
+    z-index: 20;
+}
+
+.story-photo, .cover-photo {
+    width: 100%;
+    height: 180px !important;
+    object-fit: cover;
+    border-radius: 1px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.polaroid-caption {
+    font-family: var(--font-handwritten);
+    font-size: 1.45rem;
+    color: #2b3531;
+    text-align: center;
+    position: absolute;
+    bottom: 8px;
+    left: 10px;
+    right: 10px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    user-select: none;
+}
+
+/* Washi Tape Centralizado no Polaroid */
+.tape-top-center {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-3deg);
+    width: 75px;
+    height: 22px;
+    background-color: rgba(220, 190, 140, 0.5);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    z-index: 15;
+    backdrop-filter: blur(0.5px);
+}
+
+.tape-top-center::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; left: -4px; right: -4px;
+    border-left: 3px dotted var(--bg-paper);
+    border-right: 3px dotted var(--bg-paper);
+}
+
+/* Botão/Overlay de Assistir Vídeo Online */
+.play-overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    height: 180px; /* Mesma altura da foto */
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 1px;
+    z-index: 12;
+}
+
+.media-frame:hover .play-overlay {
+    opacity: 1;
+}
+
+/* Linhas tracejadas de jornada estilo Scrapbook (SVG) */
+.scrapbook-path-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Modal de Vídeo Interativo (Premium) */
+.video-modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 3000;
+    display: none; /* Controlado por JS */
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.video-modal.active {
+    display: flex;
+}
+
+.video-modal-backdrop {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(10px);
+    transition: opacity 0.3s ease;
+}
+
+.video-modal-content {
+    position: relative;
+    width: 100%;
+    max-width: 750px;
+    background-color: #000;
+    border-radius: 8px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    z-index: 10;
+    transform: scale(0.95);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.video-modal.active .video-modal-content {
+    transform: scale(1);
+}
+
+.video-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    font-size: 1.5rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    transition: all 0.2s;
+}
+
+.video-modal-close:hover {
+    background: var(--accent-red);
+    border-color: transparent;
+    transform: scale(1.1);
+}
+
+.video-modal-iframe-container {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* Proporção 16:9 */
+}
+
+.video-modal-iframe-container iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.video-container {
+    display: none; /* A visualização de vídeo online agora é via modal popup */
+}
+
+/* ==========================================================================
+   CONTRACAPA E ENCERRAMENTO
+   ========================================================================== */
+
+.back-cover {
+    text-align: center;
+    justify-content: center;
+    padding: 40px 30px;
+}
+
+.back-cover-decoration {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.back-title {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 2rem;
+    color: var(--accent-green);
+    margin-bottom: 15px;
+}
+
+.back-message {
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px dashed var(--border-dashed);
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    z-index: 2;
+}
+
+.back-message .handwritten {
+    font-size: 1.5rem;
+    color: var(--text-main);
+    margin-bottom: 15px;
+}
+
+.handwritten-sig {
+    font-family: var(--font-handwritten);
+    font-size: 2rem;
+    color: var(--accent-orange);
+    text-align: right;
+}
+
+.adventure-seal {
+    width: 120px;
+    height: 120px;
+    background-color: var(--accent-orange);
+    color: #fff;
+    border-radius: 50%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 12px rgba(217, 119, 6, 0.3);
+    border: 4px double #fff;
+    transform: rotate(-10deg);
+    font-family: var(--font-title);
+    user-select: none;
+    transition: transform 0.4s ease;
+    z-index: 2;
+}
+
+.adventure-seal:hover {
+    transform: rotate(5deg) scale(1.1);
+}
+
+.seal-inner {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.6rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+.seal-inner strong {
+    font-size: 0.75rem;
+    margin: 3px 0;
+    display: block;
+    letter-spacing: 0.5px;
+}
+
+.back-footer {
+    margin-top: 20px;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    border-top: 1px solid var(--border-dashed);
+    padding-top: 8px;
+    z-index: 2;
+}
+
+/* ==========================================================================
+   CONFIGURAÇÃO DE MÍDIA HÍBRIDA (ONLINE VS PRINT)
+   ========================================================================== */
+
+.print-only {
+    display: none !important;
+}
+
+.print-image-fallback {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.qr-code-placeholder {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-top: 1px dashed var(--border-dashed);
+    padding-top: 8px;
+    margin-top: 5px;
+}
+
+.qr-box {
+    width: 45px;
+    height: 45px;
+    border: 1px solid #ccc;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+
+.qr-mock {
+    font-size: 0.4rem;
+    font-weight: 800;
+    text-align: center;
+    color: #333;
+    line-height: 1.1;
+    text-transform: uppercase;
+}
+
+.qr-caption {
+    font-size: 0.65rem;
+    color: var(--text-light);
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   COMPATIBILIDADE RESPONSIVA (TELA MÓVEL / WEB VIEWER)
+   ========================================================================== */
+
+@media (max-width: 900px) {
+    .pdf-sidebar {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 220px;
+        box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+    }
+    
+    .pdf-sidebar.collapsed {
+        width: 0;
+        margin-left: -220px;
+    }
+    
+    .pdf-toolbar-center {
+        position: static;
+        transform: none;
+    }
+    
+    .pdf-zoom-presets {
+        display: none; /* Oculta presets para economizar espaço no celular */
+    }
+    
+    .btn-text {
+        display: none; /* Mostra apenas ícones nos botões da barra */
+    }
+    
+    .pdf-toolbar {
+        padding: 0 10px;
+    }
+    
+    .pdf-viewer {
+        padding: 20px 5px;
+    }
+}
+
+/* ==========================================================================
+   REGRAS DE IMPRESSÃO EXTREMAMENTE CALIBRADAS (A4 Portrait - EXACT 12 PAGES)
+   ========================================================================== */
+
+@media print {
+    @page {
+        size: A4 portrait;
+        margin: 0 !important; /* Desativa completamente margens e cabeçalhos automáticos */
+    }
+
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 210mm !important;
+        height: 297mm !important;
+        overflow: visible !important;
+        background-color: #fff !important;
+    }
+
+    body {
+        background: #fff !important;
+        color: #000 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    /* Remove todos os elementos da interface do Leitor de PDF na impressão */
+    .pdf-toolbar,
+    .timeline-nav,
+    .online-only {
+        display: none !important;
+    }
+    
+    .pdf-workspace {
+        display: block !important;
+        height: auto !important;
+        width: auto !important;
+        overflow: visible !important;
+        background: #fff !important;
+    }
+
+    .pdf-viewer {
+        display: block !important;
+        height: auto !important;
+        width: auto !important;
+        overflow: visible !important;
+        padding: 0 !important;
+        background: #fff !important;
+    }
+
+    .album-container {
+        margin: 0 !important;
+        padding: 0 !important;
+        height: auto !important;
+        overflow: visible !important;
+        display: block !important;
+        font-size: 0 !important; /* Remove quebras fantasmas causadas por espaços */
+    }
+    
+    /* Wrapper na impressão: Preenche a largura útil e limita a altura de forma segura para evitar transbordo */
+    .page-wrapper {
+        width: 100% !important;
+        height: 275mm !important; /* Altura segura que cabe no A4 com margens padrão ou sem margens */
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+        position: relative !important;
+        box-sizing: border-box !important;
+        transform: none !important; /* Reseta o scale da web */
+        break-after: page !important; /* Força quebra após cada wrapper */
+        break-inside: avoid !important;
+    }
+    
+    /* Página do álbum na impressão: Preenche o wrapper completamente de forma segura */
+    .album-page {
+        font-size: 1rem !important;
+        width: 100% !important;
+        height: 100% !important; /* Herda a altura de 275mm do wrapper */
+        transform: none !important; /* Sem escala CSS */
+        margin: 0 !important;
+        padding: 20mm 15mm !important; /* Margem interna de segurança física contra cortes */
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        position: relative !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        background-color: var(--bg-paper) !important;
+        box-sizing: border-box !important;
+        break-after: avoid !important; /* A quebra é exclusiva do wrapper */
+        break-inside: avoid !important;
+    }
+
+    /* Linhas pontilhadas internas na impressão retrato */
+    .album-page::after {
+        top: 15mm !important;
+        left: 10mm !important;
+        right: 10mm !important;
+        bottom: 15mm !important;
+        border: 1px dashed var(--border-dashed) !important;
+    }
+    
+    /* Exibe os fallbacks de impressão */
+    .print-only {
+        display: block !important;
+    }
+    
+    .print-image-fallback {
+        display: flex !important;
+    }
+    
+    /* Mantém as fitas adesivas na impressão */
+    .tape {
+        background-color: rgba(220, 190, 140, 0.6) !important;
+    }
+    
+    /* Impede cortes de linhas/parágrafos no final da folha */
+    .story-text, .story-grid, .media-frame {
+        break-inside: avoid !important;
+    }
+
+    /* Calibração de Fontes Físicas em Pontos (pt) para caber exatamente no A4 Retrato */
+    .main-title {
+        font-size: 28pt !important;
+        margin-bottom: 5px !important;
+    }
+
+    .sub-title {
+        font-size: 12pt !important;
+    }
+
+    .tagline {
+        font-size: 8.5pt !important;
+        letter-spacing: 2px !important;
+        margin-bottom: 5px !important;
+    }
+
+    .year-title {
+        font-size: 18pt !important;
+    }
+
+    .page-number {
+        font-size: 16pt !important;
+    }
+
+    .age-badge {
+        font-size: 8pt !important;
+        padding: 2pt 8pt !important;
+    }
+
+    .story-headline {
+        font-size: 13pt !important;
+        margin-bottom: 3px !important;
+    }
+
+    .story-text {
+        font-size: 9.5pt !important;
+        gap: 6px !important;
+        line-height: 1.45 !important;
+    }
+
+    .handwritten-note {
+        font-size: 14pt !important;
+        margin-top: 6px !important;
+        padding-left: 10px !important;
+    }
+
+    .handwritten {
+        font-size: 16pt !important;
+        margin-bottom: 8px !important;
+    }
+
+    .handwritten-sig {
+        font-size: 18pt !important;
+    }
+
+    .cover-photo-frame {
+        max-width: 220px !important;
+        padding: 8px 8px 24px !important;
+        transform: rotate(-2deg) !important;
+    }
+
+    .cover-photo {
+        height: 170px !important;
+    }
+
+    .media-frame {
+        max-width: 220px !important;
+        padding: 8px 8px 20px !important;
+        transform: rotate(2deg) !important;
+    }
+
+    .story-photo {
+        height: 120px !important;
+    }
+
+    .sticker {
+        font-size: 1.8rem !important;
+        width: 45px !important;
+        height: 45px !important;
+    }
+
+    .tape {
+        width: 75px !important;
+        height: 20px !important;
+    }
+
+    .pin {
+        width: 10px !important;
+        height: 10px !important;
+    }
+
+    .adventure-seal {
+        width: 105px !important;
+        height: 105px !important;
+        margin-top: 10px !important;
+    }
+
+    .seal-inner {
+        font-size: 5pt !important;
+    }
+
+    .seal-inner strong {
+        font-size: 6.5pt !important;
+    }
+
+    .back-footer {
+        font-size: 7.5pt !important;
+        margin-top: 10px !important;
+    }
+}
+
+/* ==========================================================================
+   SISTEMA DE GALERIA DE FOTOS (ONLINE ONLY)
+   ========================================================================== */
+
+/* Botão de Galeria na página do álbum */
+.gallery-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 18px;
+    padding: 10px 20px;
+    background-color: #ede0d4;
+    border: 2px dashed #b5a48c;
+    border-radius: 24px;
+    color: var(--text-main);
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-decoration: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.06);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.gallery-btn:hover {
+    background-color: #e6ccb2;
+    border-color: #7f5539;
+    transform: translateY(-2px) rotate(-1deg);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.12);
+}
+
+.gallery-btn:active {
+    transform: translateY(0);
+}
+
+/* Corpo da página de galeria */
+.gallery-page-body {
+    background-color: #121614;
+    background-image: radial-gradient(circle at center, rgba(61,106,69,0.15) 0%, rgba(18,22,20,0.9) 100%), 
+                      url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.065"/></svg>');
+    color: #e5e7eb;
+    font-family: var(--font-text);
+    min-height: 100vh;
+    overflow-y: auto;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* Fitas decorativas nos cantos */
+.gallery-decor-tape {
+    position: fixed;
+    width: 140px;
+    height: 35px;
+    background-color: rgba(220, 190, 140, 0.25);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 5;
+    pointer-events: none;
+}
+
+.gallery-decor-tape.tape-top-left {
+    top: 15px;
+    left: -30px;
+    transform: rotate(-30deg);
+}
+
+.gallery-decor-tape.tape-top-right {
+    top: 15px;
+    right: -30px;
+    transform: rotate(30deg);
+}
+
+/* Container do grid */
+.gallery-layout-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px 110px 20px;
+}
+
+/* Cabeçalho Scrapbook */
+.gallery-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-paper);
+    border-radius: 8px;
+    padding: 25px 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    position: relative;
+    margin-bottom: 40px;
+    border: 1px dashed var(--border-dashed);
+}
+
+.gallery-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.04"/></svg>');
+    pointer-events: none;
+    border-radius: 8px;
+}
+
+.gallery-header-left, 
+.gallery-header-right {
+    flex-shrink: 0;
+    width: 180px;
+}
+
+.gallery-header-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.gallery-header-center {
+    flex-grow: 1;
+    text-align: center;
+}
+
+/* Botão voltar */
+.gallery-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background-color: #ede0d4;
+    border: 1px dashed #b5a48c;
+    border-radius: 6px;
+    color: var(--text-main);
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-decoration: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.gallery-back-btn:hover {
+    background-color: #e6ccb2;
+    transform: translateX(-4px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.back-arrow {
+    font-size: 0.75rem;
+}
+
+/* Títulos do Cabeçalho */
+.gallery-title-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.gallery-vintage-tag {
+    display: inline-block;
+    font-family: var(--font-handwritten);
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--accent-orange);
+    transform: rotate(-2deg);
+    margin-bottom: -5px;
+    text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.5);
+}
+
+.gallery-main-title {
+    font-family: var(--font-title);
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--text-main);
+    letter-spacing: -0.5px;
+    margin: 0;
+}
+
+.gallery-subtitle {
+    font-family: var(--font-handwritten);
+    font-size: 1.5rem;
+    color: var(--text-light);
+    margin: 0;
+}
+
+.gallery-stamp {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 0.75rem;
+    color: #7f5539;
+    border: 2px double #7f5539;
+    padding: 6px 14px;
+    transform: rotate(6deg);
+    border-radius: 4px;
+    opacity: 0.85;
+    letter-spacing: 1.5px;
+    user-select: none;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Workspace e Mural */
+.gallery-workspace {
+    width: 100%;
+}
+
+.gallery-board {
+    width: 100%;
+    min-height: 400px;
+}
+
+/* Grade Grid */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 35px 25px;
+    width: 100%;
+}
+
+/* Cartão Polaroid na Galeria */
+.gallery-polaroid-card {
+    background-color: var(--bg-paper);
+    padding: 15px 15px 22px 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    border-radius: 2px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-sizing: border-box;
+}
+
+.gallery-polaroid-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.04"/></svg>');
+    pointer-events: none;
+}
+
+.gallery-polaroid-card:hover {
+    transform: translateY(-8px) scale(1.02) rotate(0deg) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.55);
+    z-index: 50;
+}
+
+.gallery-polaroid-card.selected {
+    box-shadow: 0 12px 30px rgba(220, 38, 38, 0.25), 0 0 0 3px var(--accent-red);
+}
+
+/* Fita Adesiva do Card */
+.gallery-tape {
+    position: absolute;
+    width: 75px;
+    height: 22px;
+    background-color: rgba(220, 190, 140, 0.35);
+    top: -11px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-2deg);
+    z-index: 10;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    backdrop-filter: blur(1px);
+    transition: all 0.2s;
+}
+
+.gallery-polaroid-card:hover .gallery-tape {
+    background-color: rgba(220, 190, 140, 0.6);
+}
+
+.gallery-polaroid-card.selected .gallery-tape {
+    background-color: rgba(220, 38, 38, 0.25);
+}
+
+/* Imagem e Badge */
+.gallery-photo-container {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background-color: #2b3531;
+    position: relative;
+    cursor: zoom-in;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.gallery-photo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.gallery-polaroid-card:hover .gallery-photo-container img {
+    transform: scale(1.05);
+}
+
+.gallery-select-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.8rem;
+    color: var(--accent-red);
+    opacity: 0;
+    transform: scale(0) rotate(15deg);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: auto;
+    cursor: pointer;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
+    z-index: 20;
+}
+
+.gallery-polaroid-card.selected .gallery-select-badge {
+    opacity: 1;
+    transform: scale(1.1) rotate(-10deg);
+}
+
+.gallery-select-badge:hover {
+    transform: scale(1.3) rotate(5deg) !important;
+}
+
+/* Rodapé Polaroid */
+.gallery-polaroid-footer {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 5;
+}
+
+.gallery-photo-caption {
+    font-family: var(--font-handwritten);
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: var(--text-main);
+    user-select: none;
+    cursor: pointer;
+}
+
+.gallery-card-checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border: 2px solid #b5a48c;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    background-color: transparent;
+    outline: none;
+}
+
+.card-checkbox:checked {
+    background-color: var(--accent-red);
+    border-color: var(--accent-red);
+}
+
+.card-checkbox:checked::after {
+    content: '✓';
+    position: absolute;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: bold;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.card-checkbox:hover {
+    border-color: var(--accent-red);
+    transform: scale(1.1);
+}
+
+/* Estados da Galeria */
+.gallery-state-message {
+    padding: 80px 20px;
+    text-align: center;
+    background-color: var(--bg-paper);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: 1px dashed var(--border-dashed);
+    color: var(--text-main);
+    max-width: 600px;
+    margin: 60px auto;
+    position: relative;
+}
+
+.gallery-state-message::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.04"/></svg>');
+    pointer-events: none;
+    border-radius: 8px;
+}
+
+.spinner {
+    width: 45px;
+    height: 45px;
+    border: 4px solid #ede0d4;
+    border-top: 4px solid var(--accent-green);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.empty-icon {
+    font-size: 3.5rem;
+    margin-bottom: 15px;
+    line-height: 1;
+}
+
+.gallery-state-message h3 {
+    font-family: var(--font-title);
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+    color: var(--text-main);
+}
+
+.gallery-state-message p {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    margin-bottom: 15px;
+}
+
+.folder-path {
+    display: inline-block;
+    background-color: #eae3d2;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 0.95rem;
+    color: #7f5539;
+    border: 1px solid #dcd6c5;
+    margin-bottom: 15px;
+}
+
+.empty-tips {
+    font-size: 0.85rem !important;
+    font-style: italic;
+    color: var(--text-light);
+    margin-top: 10px;
+}
+
+/* Barra Flutuante de Seleção */
+.gallery-action-bar {
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
+    max-width: 650px;
+    background: rgba(30, 37, 34, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 14px 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    z-index: 500;
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+    from { transform: translate(-50%, 50px); opacity: 0; }
+    to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+.action-bar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.selection-count {
+    color: #fff;
+    font-family: var(--font-title);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.action-bar-right {
+    display: flex;
+    gap: 10px;
+}
+
+.gallery-action-btn {
+    padding: 9px 18px;
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 0.85rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.copy-btn {
+    background-color: var(--accent-orange);
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(217, 119, 6, 0.35);
+}
+
+.copy-btn:hover {
+    background-color: #b45309;
+    transform: translateY(-1px);
+}
+
+.clear-btn {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #e5e7eb;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.clear-btn:hover {
+    background-color: rgba(255, 255, 255, 0.18);
+    color: #fff;
+}
+
+/* Lightbox Modal */
+.gallery-lightbox {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.gallery-lightbox.active {
+    display: flex;
+}
+
+.lightbox-backdrop {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(10, 13, 11, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 1;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 3rem;
+    cursor: pointer;
+    z-index: 10;
+    line-height: 1;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    outline: none;
+}
+
+.lightbox-close:hover {
+    opacity: 1;
+}
+
+.lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 1.8rem;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.2s;
+    outline: none;
+    user-select: none;
+}
+
+.lightbox-nav:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-50%) scale(1.08);
+}
+
+.nav-prev { left: 30px; }
+.nav-next { right: 30px; }
+
+.lightbox-content {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.lightbox-polaroid {
+    background-color: var(--bg-paper);
+    padding: 15px 15px 20px 15px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+}
+
+.lightbox-polaroid::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.04"/></svg>');
+    pointer-events: none;
+    border-radius: 4px;
+}
+
+.lightbox-image-container {
+    width: 100%;
+    max-height: 60vh;
+    overflow: hidden;
+    background-color: #2b3531;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.lightbox-image-container img {
+    width: 100%;
+    height: auto;
+    max-height: 60vh;
+    object-fit: contain;
+    display: block;
+}
+
+.lightbox-footer {
+    margin-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    position: relative;
+    z-index: 5;
+}
+
+.lightbox-caption {
+    font-family: var(--font-handwritten);
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: var(--text-main);
+}
+
+.lightbox-counter {
+    font-family: var(--font-title);
+    font-size: 0.85rem;
+    color: var(--text-light);
+    font-weight: 600;
+}
+
+.lightbox-select-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    border-radius: 30px;
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    outline: none;
+}
+
+.lightbox-select-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+.lightbox-select-btn.selected {
+    background-color: var(--accent-red);
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.45);
+}
+
+/* Responsividade da Galeria */
+@media (max-width: 768px) {
+    .gallery-header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
+    }
+    
+    .gallery-header-left, 
+    .gallery-header-right {
+        width: 100%;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .gallery-stamp {
+        transform: none;
+        margin-top: 5px;
+    }
+    
+    .lightbox-nav {
+        width: 45px;
+        height: 45px;
+        font-size: 1.4rem;
+    }
+    
+    .nav-prev { left: 10px; }
+    .nav-next { right: 10px; }
+    
+    .lightbox-polaroid {
+        max-width: 90vw;
+    }
+    
+    .gallery-action-bar {
+        width: calc(100% - 20px);
+        bottom: 10px;
+        padding: 12px;
+    }
+    
+    .action-bar-content {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .action-bar-right {
+        width: 100%;
+        justify-content: center;
+    }
+}
+

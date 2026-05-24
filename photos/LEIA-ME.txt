@@ -1,0 +1,18 @@
+INSTRUÇÕES DA GALERIA DE FOTOS - DIÁRIO DE JOSÉ ROBERTO
+======================================================
+
+Para adicionar fotos na galeria de cada ano, siga estes passos simples:
+
+1. Acesse a pasta do ano correspondente dentro desta pasta "photos" (por exemplo, "photos/2016" para o ano de 2016).
+2. Adicione as fotos que você quer exibir naquela galeria.
+3. IMPORTANTE: Renomeie as fotos em sequência numérica simples:
+   - 1.jpg
+   - 2.jpg
+   - 3.jpg
+   - 4.jpg
+   - 5.jpg
+   ... e assim por diante.
+
+O sistema de galeria do site foi projetado para ler automaticamente esses arquivos sequenciais (1.jpg, 2.jpg, 3.jpg...) a partir da pasta de cada ano. Ele lerá todas as fotos que encontrar na pasta até a numeração acabar.
+
+Você pode colocar fotos em formato JPG, JPEG ou PNG (o sistema procurará por extensões comuns automaticamente).

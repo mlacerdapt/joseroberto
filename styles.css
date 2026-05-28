@@ -436,11 +436,18 @@ body {
 
 .cover-page {
     text-align: center;
-    padding: 40px 30px;
+    padding: 55px 45px;
+}
+
+.page-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .cover-header {
-    margin-bottom: 25px;
+    margin-bottom: 0;
 }
 
 .tagline {
@@ -474,30 +481,110 @@ body {
     font-weight: 600;
 }
 
+/* Elementos de Moldura e Foto da Capa Tradicionais (Mantidos para compatibilidade) */
 .cover-photo-frame {
     position: relative;
-    width: 90%;
-    max-width: 280px;
-    margin: 0 auto;
     background: #fff;
-    padding: 12px 12px 35px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    border-radius: 4px;
-    transform: rotate(-2deg);
-    transition: transform 0.4s ease;
-    z-index: 2;
-}
-
-.cover-photo-frame:hover {
-    transform: rotate(1deg) scale(1.03);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .cover-photo {
     width: 100%;
-    height: 220px;
     object-fit: cover;
     border-radius: 2px;
     border: 1px solid #eee;
+}
+
+/* Novo Container de Jornada da Capa */
+.cover-journey-container {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    margin: 25px auto;
+    z-index: 2;
+}
+
+.cover-journey-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.cover-polaroid-2016 {
+    position: absolute !important;
+    top: 10px;
+    left: 15px;
+    transform: rotate(-6deg);
+    z-index: 2;
+    margin: 0 !important;
+}
+
+.cover-polaroid-2026 {
+    position: absolute !important;
+    bottom: 10px;
+    right: 15px;
+    transform: rotate(5deg);
+    z-index: 2;
+    margin: 0 !important;
+}
+
+.cover-journey-container .cover-photo-frame {
+    width: 258px !important;
+    max-width: 258px !important;
+    padding: 8px 8px 30px !important;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1), 0 12px 30px rgba(0,0,0,0.18) !important;
+    border-radius: 4px !important;
+}
+
+.cover-journey-container .cover-photo-frame:hover {
+    transform: scale(1.05) rotate(0deg) !important;
+    z-index: 10 !important;
+}
+
+.cover-journey-container .cover-photo {
+    width: 100% !important;
+    height: 174px !important;
+}
+
+.journey-sticker {
+    position: absolute !important;
+    z-index: 5;
+    width: 46px !important;
+    height: 46px !important;
+    font-size: 1.7rem !important;
+    border-width: 1.5px !important;
+    margin: 0 !important;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+}
+
+/* Distribuição harmônica ao longo da curva viewBox 0 0 704 600 */
+.sticker-soccer {
+    left: 377px;
+    top: 159px;
+    transform: rotate(-12deg);
+}
+
+.sticker-handcraft {
+    left: 328px;
+    top: 277px;
+    transform: rotate(8deg);
+}
+
+.sticker-horse {
+    left: 277px;
+    top: 395px;
+    transform: rotate(-10deg);
+}
+
+.sticker-bike {
+    left: 377px;
+    top: 410px;
+    transform: rotate(15deg);
 }
 
 .cover-footer {
@@ -534,6 +621,7 @@ body {
     border-bottom: 2px dashed var(--border-dashed);
     padding-bottom: 6px;
     margin-bottom: 20px;
+    position: relative;
     z-index: 2;
 }
 
@@ -569,6 +657,7 @@ body {
     gap: 20px;
     flex-grow: 1;
     justify-content: space-between;
+    position: relative;
     z-index: 2;
 }
 
@@ -908,7 +997,7 @@ body {
 }
 
 .qr-code-placeholder {
-    display: flex;
+    display: none; /* Oculta na tela por padrão */
     align-items: center;
     gap: 15px;
     border-top: 1px dashed var(--border-dashed);
@@ -917,23 +1006,21 @@ body {
 }
 
 .qr-box {
-    width: 45px;
-    height: 45px;
-    border: 1px solid #ccc;
-    background: #f0f0f0;
+    width: 60px;
+    height: 60px;
+    border: 1px solid #ddd;
+    background: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 4px;
+    padding: 3px;
 }
 
-.qr-mock {
-    font-size: 0.4rem;
-    font-weight: 800;
-    text-align: center;
-    color: #333;
-    line-height: 1.1;
-    text-transform: uppercase;
+.qr-code-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 .qr-caption {
@@ -999,11 +1086,11 @@ body {
         width: 210mm !important;
         height: 297mm !important;
         overflow: visible !important;
-        background-color: #fff !important;
+        background-color: var(--bg-paper) !important;
     }
 
     body {
-        background: #fff !important;
+        background: var(--bg-paper) !important;
         color: #000 !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
@@ -1021,7 +1108,7 @@ body {
         height: auto !important;
         width: auto !important;
         overflow: visible !important;
-        background: #fff !important;
+        background: var(--bg-paper) !important;
     }
 
     .pdf-viewer {
@@ -1030,7 +1117,7 @@ body {
         width: auto !important;
         overflow: visible !important;
         padding: 0 !important;
-        background: #fff !important;
+        background: var(--bg-paper) !important;
     }
 
     .album-container {
@@ -1045,7 +1132,7 @@ body {
     /* Wrapper na impressão: Preenche a largura útil e limita a altura de forma segura para evitar transbordo */
     .page-wrapper {
         width: 100% !important;
-        height: 275mm !important; /* Altura segura que cabe no A4 com margens padrão ou sem margens */
+        height: 290mm !important; /* Altura que cabe no A4 com margens reduzidas */
         margin: 0 !important;
         padding: 0 !important;
         display: block !important;
@@ -1060,10 +1147,10 @@ body {
     .album-page {
         font-size: 1rem !important;
         width: 100% !important;
-        height: 100% !important; /* Herda a altura de 275mm do wrapper */
+        height: 100% !important; /* Herda a altura de 290mm do wrapper */
         transform: none !important; /* Sem escala CSS */
         margin: 0 !important;
-        padding: 20mm 15mm !important; /* Margem interna de segurança física contra cortes */
+        padding: 15mm 15mm !important; /* Margem interna de segurança física contra cortes */
         border-radius: 0 !important;
         box-shadow: none !important;
         position: relative !important;
@@ -1079,10 +1166,10 @@ body {
 
     /* Linhas pontilhadas internas na impressão retrato */
     .album-page::after {
-        top: 15mm !important;
+        top: 10mm !important;
         left: 10mm !important;
         right: 10mm !important;
-        bottom: 15mm !important;
+        bottom: 10mm !important;
         border: 1px dashed var(--border-dashed) !important;
     }
     
@@ -1160,20 +1247,88 @@ body {
         font-size: 18pt !important;
     }
 
-    .cover-photo-frame {
+    /* Ajustes específicos para a jornada de fotos da capa na impressão */
+    .cover-journey-container {
+        height: 150mm !important;
+        margin: 5mm auto !important;
+    }
+
+    .cover-polaroid-2016 {
+        position: absolute !important;
+        top: 2mm !important;
+        left: 2mm !important;
+        transform: rotate(-6deg) !important;
+    }
+
+    .cover-polaroid-2026 {
+        position: absolute !important;
+        bottom: 2mm !important;
+        right: 2mm !important;
+        transform: rotate(5deg) !important;
+    }
+
+    .cover-journey-container .cover-photo-frame {
+        width: 60mm !important;
+        max-width: 60mm !important;
+        padding: 2mm 2mm 8mm !important;
+    }
+
+    .cover-journey-container .cover-photo {
+        width: 100% !important;
+        height: 40mm !important;
+    }
+
+    .cover-photo-frame:not(.cover-journey-container .cover-photo-frame) {
         max-width: 220px !important;
         padding: 8px 8px 24px !important;
         transform: rotate(-2deg) !important;
     }
 
-    .cover-photo {
+    .cover-photo:not(.cover-journey-container .cover-photo) {
         height: 170px !important;
     }
 
     .media-frame {
         max-width: 220px !important;
-        padding: 8px 8px 20px !important;
+        padding: 8px 8px 24px !important;
         transform: rotate(2deg) !important;
+    }
+
+    .gallery-btn {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        background-color: #faf6f0 !important;
+        border: 1.5px dashed #b5a48c !important;
+        padding: 6px 12px 10px !important;
+        border-radius: 12px !important;
+        color: #2b3531 !important;
+        text-align: center !important;
+        width: 140px !important;
+        margin: 5px auto 0 !important;
+        box-shadow: none !important;
+        text-decoration: none !important;
+        font-size: 8pt !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    .qr-btn-code {
+        display: block !important;
+        margin-top: 6px !important;
+        width: 75px !important;
+        height: 75px !important;
+        border: 1px solid #e0d5c1 !important;
+        background: #fff !important;
+        padding: 3px !important;
+        border-radius: 6px !important;
+        box-sizing: border-box !important;
+    }
+
+    .qr-btn-code img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
     }
 
     .story-photo {

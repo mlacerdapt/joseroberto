@@ -74,31 +74,45 @@
                 <div class="page-wrapper" id="wrapper-page-cover" data-page-index="1">
                     <section class="album-page cover-page" id="page-cover">
                         <div class="page-content">
-                            <!-- Adesivos decorativos virtuais (estilo Scrapbook) -->
-                            <div class="sticker soccer-sticker">⚽</div>
-                            <div class="sticker bike-sticker">🚲</div>
-                            <div class="sticker handcraft-sticker">🛠️</div>
-                            <div class="sticker horse-sticker">🐴</div>
-
                             <div class="cover-header">
-                                <p class="tagline">10 ANOS DE PARCERIA & AVENTURAS</p>
-                                <h1 class="main-title">Diário de Bordo do Tio</h1>
+                                <p class="tagline">A GRANDE AVENTURA DE ME TORNAR SEU TIO</p>
+                                <h1 class="main-title">Como Você Mudou o Meu Mundo</h1>
                                 <h2 class="sub-title">A incrível jornada de ver o <strong>José Roberto</strong> crescer</h2>
                             </div>
 
-                            <div class="cover-photo-frame polaroid-card">
-                                <div class="tape tape-top-left"></div>
-                                <div class="tape tape-top-right"></div>
-                                <!-- Imagem principal de capa -->
-                                <img src="https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?q=80&w=800" alt="Capa - Tio e Sobrinho" class="cover-photo">
-                                <div class="polaroid-caption">Parceiros de aventura!</div>
+                            <!-- Seção de jornada de fotos conectadas com linha do tempo e adesivos -->
+                            <div class="cover-journey-container">
+                                <!-- Linha conectora SVG sinuosa (Cubic Bezier) -->
+                                <svg class="cover-journey-line" viewBox="0 0 704 600" preserveAspectRatio="none">
+                                    <path d="M 230,180 C 700,50 0,550 470,420" fill="none" stroke="var(--accent-orange)" stroke-width="2.5" stroke-dasharray="6,6" />
+                                </svg>
+
+                                <!-- Adesivos dispostos ao longo da jornada -->
+                                <div class="sticker journey-sticker sticker-soccer" title="Amor pelo futebol!">⚽</div>
+                                <div class="sticker journey-sticker sticker-bike" title="Aventuras de bike!">🚲</div>
+                                <div class="sticker journey-sticker sticker-horse" title="Primeiro cavalo!">🐴</div>
+                                <div class="sticker journey-sticker sticker-handcraft" title="Pequeno grande inventor!">🛠️</div>
+
+                                <!-- Polaroid 2016 (Início) -->
+                                <div class="cover-photo-frame polaroid-card cover-polaroid-2016">
+                                    <div class="tape tape-top-left"></div>
+                                    <img src="photos/cover_2016.png" alt="José Roberto bebê - 2016" class="cover-photo">
+                                    <div class="polaroid-caption">2016: O início da jornada!</div>
+                                </div>
+
+                                <!-- Polaroid 2026 (10 Anos) -->
+                                <div class="cover-photo-frame polaroid-card cover-polaroid-2026">
+                                    <div class="tape tape-top-right"></div>
+                                    <img src="photos/cover_2026.png" alt="José Roberto 10 anos - 2026" class="cover-photo">
+                                    <div class="polaroid-caption">2026: 10 anos de aventuras!</div>
+                                </div>
                             </div>
 
                             <div class="cover-footer">
-                                <p class="handwritten">"Uma celebração dos primeiros 10 anos de risadas, tombos, conquistas e muita diversão."</p>
+                                <p class="handwritten">"De segurar você no colo em 2016 a correr atrás de você na bike... Que aventura fantástica tem sido ser seu tio!"</p>
                                 <div class="meta-info">
                                     <span><strong>Autor:</strong> Tio Marcelo</span>
-                                    <span><strong>Data:</strong> 24 de Maio de 2026</span>
+                                    <span><strong>Data:</strong> 15/06/2026</span>
                                 </div>
                             </div>
                         </div>
@@ -121,23 +135,26 @@
                             <div class="story-grid">
                                 <div class="story-text">
                                     <h3 class="story-headline">"O pequeno artesão de sorrisos"</h3>
-                                    <p>Lembro-me perfeitamente da primeira vez que te segurei no colo. Tão pequeno, mas já com um olhar super atento a tudo ao seu redor. Desde bebê, você já demonstrava uma curiosidade imensa em mexer nas coisas, segurar brinquedos e tentar "desmontar" chocalhos com aquelas mãozinhas gordinhas.</p>
+                                    <p>Me lembro perfeitamente da primeira vez que te segurei no colo. Tão pequeno, mas já com um olhar super atento a tudo ao seu redor. Eu fazia uns barulhos com a boca e você ficava super atento procurando de onde vinha, parecia até que estava tentando falar comigo! Desde bebê, sua curiosidade já era gigante, sempre querendo mexer em tudo e tentando "desmontar" tudo.</p>
                                     <p class="handwritten-note">"Foi aqui que percebi que minha vida de tio seria cheia de surpresas e muita bagunça boa!"</p>
-                                    <a href="gallery.html?year=2016" class="gallery-btn online-only">📸 Galeria de 2016</a>
+                                    
                                 </div>
 
                                 <div class="story-media">
                                     <div class="media-frame polaroid-card" data-video-url="https://www.youtube.com/embed/tgbNymZ7vqY" title="Clique para assistir ao vídeo!">
                                         <div class="tape tape-top-center"></div>
-                                        <img src="https://images.unsplash.com/photo-1519689680058-324335c77eb2?q=80&w=800" alt="José Roberto - Bebê" class="story-photo">
+                                        <img src="photos/2016/1.jpg" alt="José Roberto - Bebê" class="story-photo">
                                         <div class="polaroid-caption">O início de tudo em 2016</div>
                                         <div class="play-overlay online-only">▶️ Assistir Vídeo</div>
-                                        <div class="print-only qr-code-placeholder">
-                                            <div class="qr-box"><div class="qr-mock">📱 Scan</div></div>
-                                            <p class="qr-caption">Ver vídeo</p>
-                                        </div>
                                     </div>
                                 </div>
+                            
+                                <a href="gallery.html?year=2016" class="gallery-btn">
+                                    <span>📸 Galeria de 2016</span>
+                                    <span class="print-only qr-btn-code">
+                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mlacerdapt.github.io/joseroberto/gallery.html?year=2016" alt="QR Code Galeria" class="qr-code-img">
+                                    </span>
+                                </a>
                             </div>
                         </div>
                     </section>
@@ -160,7 +177,7 @@
                                     <h3 class="story-headline">"Aventuras sobre duas rodas... ou quase!"</h3>
                                     <p>Neste ano você aprendeu a andar firme e logo ganhou aquela sua primeira motinho/bicicleta de empurrar sem pedais. Lembro de passarmos tardes inteiras no quintal, eu correndo atrás de você enquanto você tentava acelerar com os pés no chão, fazendo barulho de motor com a boca. O amor pela velocidade começou cedo!</p>
                                     <p class="handwritten-note">"Você já queria ir mais rápido do que as pernas aguentavam."</p>
-                                    <a href="gallery.html?year=2017" class="gallery-btn online-only">📸 Galeria de 2017</a>
+                                    
                                 </div>
 
                                 <div class="story-media">
@@ -169,11 +186,15 @@
                                         <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=800" alt="Primeira moto de brinquedo" class="story-photo">
                                         <div class="polaroid-caption">Acelerando no quintal em 2017</div>
                                         <div class="play-overlay online-only">▶️ Assistir Vídeo</div>
-                                        <div class="print-only qr-code-placeholder">
-                                            <div class="qr-box"><div class="qr-mock">📱 Scan</div></div>
-                                        </div>
                                     </div>
                                 </div>
+                            
+                                <a href="gallery.html?year=2017" class="gallery-btn">
+                                    <span>📸 Galeria de 2017</span>
+                                    <span class="print-only qr-btn-code">
+                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mlacerdapt.github.io/joseroberto/gallery.html?year=2017" alt="QR Code Galeria" class="qr-code-img">
+                                    </span>
+                                </a>
                             </div>
                         </div>
                     </section>
@@ -196,7 +217,7 @@
                                     <h3 class="story-headline">"O nascimento do pequeno craque"</h3>
                                     <p>Qualquer objeto redondo virava bola na sua frente. Foi nessa época que te dei a sua primeira bola de futebol de verdade. Seus olhinhos brilharam. Passamos horas chutando na sala (desviando dos vasos da sua mãe!) e no gramado. Você caía, levantava rindo e gritava 'GOL!' com a maior energia do mundo.</p>
                                     <p class="handwritten-note">"Mesmo caindo em cima da bola, o sorriso nunca saía do rosto."</p>
-                                    <a href="gallery.html?year=2018" class="gallery-btn online-only">📸 Galeria de 2018</a>
+                                    
                                 </div>
 
                                 <div class="story-media">
@@ -205,11 +226,15 @@
                                         <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=800" alt="Primeiro futebol" class="story-photo">
                                         <div class="polaroid-caption">O pequeno artilheiro em 2018</div>
                                         <div class="play-overlay online-only">▶️ Assistir Vídeo</div>
-                                        <div class="print-only qr-code-placeholder">
-                                            <div class="qr-box"><div class="qr-mock">📱 Scan</div></div>
-                                        </div>
                                     </div>
                                 </div>
+                            
+                                <a href="gallery.html?year=2018" class="gallery-btn">
+                                    <span>📸 Galeria de 2018</span>
+                                    <span class="print-only qr-btn-code">
+                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mlacerdapt.github.io/joseroberto/gallery.html?year=2018" alt="QR Code Galeria" class="qr-code-img">
+                                    </span>
+                                </a>
                             </div>
                         </div>
                     </section>
@@ -232,7 +257,7 @@
                                     <h3 class="story-headline">"Construindo sonhos com as próprias mãos"</h3>
                                     <p>Neste ano, os brinquedos de encaixar e blocos de montar viraram seus maiores companheiros. Mas o mais legal era te ver tentar consertar as coisas com as chaves de fenda plásticas. Você olhava atentamente quando eu usava alguma ferramenta real e tentava imitar cada gesto, mostrando seu lado criador.</p>
                                     <p class="handwritten-note">"Sua mente inventiva já estava a todo vapor, criando torres e pontes malucas."</p>
-                                    <a href="gallery.html?year=2019" class="gallery-btn online-only">📸 Galeria de 2019</a>
+                                    
                                 </div>
 
                                 <div class="story-media">
@@ -241,11 +266,15 @@
                                         <img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?q=80&w=800" alt="Montando blocos" class="story-photo">
                                         <div class="polaroid-caption">Grande inventor no ano de 2019</div>
                                         <div class="play-overlay online-only">▶️ Assistir Vídeo</div>
-                                        <div class="print-only qr-code-placeholder">
-                                            <div class="qr-box"><div class="qr-mock">📱 Scan</div></div>
-                                        </div>
                                     </div>
                                 </div>
+                            
+                                <a href="gallery.html?year=2019" class="gallery-btn">
+                                    <span>📸 Galeria de 2019</span>
+                                    <span class="print-only qr-btn-code">
+                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mlacerdapt.github.io/joseroberto/gallery.html?year=2019" alt="QR Code Galeria" class="qr-code-img">
+                                    </span>
+                                </a>
                             </div>
                         </div>
                     </section>
@@ -268,7 +297,7 @@
                                     <h3 class="story-headline">"O pequeno e destemido cowboy"</h3>
                                     <p>Lembro do seu fascínio quando fomos ao sítio e você viu um cavalo de perto. Muitos meninos da sua idade teriam medo daquele animal gigante, mas você queria logo passar a mão e montar. Com minha ajuda, você subiu no selim e abriu um sorriso de orelha a orelha. A conexão com os animais foi imediata.</p>
                                     <p class="handwritten-note">"Coragem nunca faltou para esse pequeno cavaleiro!"</p>
-                                    <a href="gallery.html?year=2020" class="gallery-btn online-only">📸 Galeria de 2020</a>
+                                    
                                 </div>
 
                                 <div class="story-media">
@@ -277,11 +306,15 @@
                                         <img src="https://images.unsplash.com/photo-1553285991-4c74211f5094?q=80&w=800" alt="Primeiro contato com cavalos" class="story-photo">
                                         <div class="polaroid-caption">Galopando sem medo em 2020</div>
                                         <div class="play-overlay online-only">▶️ Assistir Vídeo</div>
-                                        <div class="print-only qr-code-placeholder">
-                                            <div class="qr-box"><div class="qr-mock">📱 Scan</div></div>
-                                        </div>
                                     </div>
                                 </div>
+                            
+                                <a href="gallery.html?year=2020" class="gallery-btn">
+                                    <span>📸 Galeria de 2020</span>
+                                    <span class="print-only qr-btn-code">
+                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mlacerdapt.github.io/joseroberto/gallery.html?year=2020" alt="QR Code Galeria" class="qr-code-img">
+                                    </span>
+                                </a>
                             </div>
                         </div>
                     </section>
@@ -304,7 +337,7 @@
                                     <h3 class="story-headline">"O grande salto para a liberdade"</h3>
                                     <p>Chegou o grande dia de tirar as rodinhas laterais da sua bicicleta. Corri segurando no seu banco por alguns metros, dizendo 'continua pedala, continua!' até que soltei. Quando você percebeu que estava equilibrando sozinho, soltou um grito de vitória. Um marco clássico da infância que tive a honra de presenciar.</p>
                                     <p class="handwritten-note">"O vento no rosto e a sensação de voar sobre duas rodas."</p>
-                                    <a href="gallery.html?year=2021" class="gallery-btn online-only">📸 Galeria de 2021</a>
+                                    
                                 </div>
 
                                 <div class="story-media">
@@ -313,11 +346,15 @@
                                         <img src="https://images.unsplash.com/photo-1485546246426-74dc88dec4d9?q=80&w=800" alt="Andando de bike" class="story-photo">
                                         <div class="polaroid-caption">Primeira corrida solo em 2021</div>
                                         <div class="play-overlay online-only">▶️ Assistir Vídeo</div>
-                                        <div class="print-only qr-code-placeholder">
-                                            <div class="qr-box"><div class="qr-mock">📱 Scan</div></div>
-                                        </div>
                                     </div>
                                 </div>
+                            
+                                <a href="gallery.html?year=2021" class="gallery-btn">
+                                    <span>📸 Galeria de 2021</span>
+                                    <span class="print-only qr-btn-code">
+                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mlacerdapt.github.io/joseroberto/gallery.html?year=2021" alt="QR Code Galeria" class="qr-code-img">
+                                    </span>
+                                </a>
                             </div>
                         </div>
                     </section>
@@ -340,7 +377,7 @@
                                     <h3 class="story-headline">"O amor pelo jogo ganha proporções gigantes"</h3>
                                     <p>Nesse ano sua paixão pelo futebol atingiu outro nível. Passamos a acompanhar jogos juntos e a vibrar de verdade. Sua habilidade com a bola nos pés também cresceu demais, treinando dribles rápidos e chutes colocados. Ver você jogando com a sua camisa favorita é um dos meus orgulhos semanais.</p>
                                     <p class="handwritten-note">"O futebol se tornou nossa linguagem secreta de comemoração."</p>
-                                    <a href="gallery.html?year=2022" class="gallery-btn online-only">📸 Galeria de 2022</a>
+                                    
                                 </div>
 
                                 <div class="story-media">
@@ -349,11 +386,15 @@
                                         <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=800" alt="Partida de futebol" class="story-photo">
                                         <div class="polaroid-caption">Vibração em campo no ano 2022</div>
                                         <div class="play-overlay online-only">▶️ Assistir Vídeo</div>
-                                        <div class="print-only qr-code-placeholder">
-                                            <div class="qr-box"><div class="qr-mock">📱 Scan</div></div>
-                                        </div>
                                     </div>
                                 </div>
+                            
+                                <a href="gallery.html?year=2022" class="gallery-btn">
+                                    <span>📸 Galeria de 2022</span>
+                                    <span class="print-only qr-btn-code">
+                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mlacerdapt.github.io/joseroberto/gallery.html?year=2022" alt="QR Code Galeria" class="qr-code-img">
+                                    </span>
+                                </a>
                             </div>
                         </div>
                     </section>
@@ -376,7 +417,7 @@
                                     <h3 class="story-headline">"O ronco do motor nos olhos de quem sonha"</h3>
                                     <p>Seja em carrinhos elétricos ou vendo motos passando na rua, você sempre ficava paralisado ouvindo o barulho e analisando as rodas. Quando te coloquei sentado na moto de verdade de um amigo (desligada, claro!), você segurou o guidão com uma firmeza de quem nasceu para pilotar. Um dia vamos rodar estradas juntos!</p>
                                     <p class="handwritten-note">"O brilho nos olhos ao sentir a força do motor na imaginação."</p>
-                                    <a href="gallery.html?year=2023" class="gallery-btn online-only">📸 Galeria de 2023</a>
+                                    
                                 </div>
 
                                 <div class="story-media">
@@ -385,11 +426,15 @@
                                         <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=800" alt="Moto e aventura" class="story-photo">
                                         <div class="polaroid-caption">Sonhando com o asfalto em 2023</div>
                                         <div class="play-overlay online-only">▶️ Assistir Vídeo</div>
-                                        <div class="print-only qr-code-placeholder">
-                                            <div class="qr-box"><div class="qr-mock">📱 Scan</div></div>
-                                        </div>
                                     </div>
                                 </div>
+                            
+                                <a href="gallery.html?year=2023" class="gallery-btn">
+                                    <span>📸 Galeria de 2023</span>
+                                    <span class="print-only qr-btn-code">
+                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mlacerdapt.github.io/joseroberto/gallery.html?year=2023" alt="QR Code Galeria" class="qr-code-img">
+                                    </span>
+                                </a>
                             </div>
                         </div>
                     </section>
@@ -412,7 +457,7 @@
                                     <h3 class="story-headline">"Mãos à obra e criatividade sem limites"</h3>
                                     <p>Com papelão, fita adesiva, pedaços de madeira e tudo o que encontrava pela frente, você começou a criar brinquedos reais e engenhocas funcionais. Projetou mini rampa de skate, fez espadas e escudos detalhados. Ver sua habilidade manual se desenvolvendo foi incrível. Você é um fazedor nato.</p>
                                     <p class="handwritten-note">"Criar com as mãos é dar vida à imaginação."</p>
-                                    <a href="gallery.html?year=2024" class="gallery-btn online-only">📸 Galeria de 2024</a>
+                                    
                                 </div>
 
                                 <div class="story-media">
@@ -421,11 +466,15 @@
                                         <img src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?q=80&w=800" alt="Artesanato infantil" class="story-photo">
                                         <div class="polaroid-caption">Fazendo arte com papelão em 2024</div>
                                         <div class="play-overlay online-only">▶️ Assistir Vídeo</div>
-                                        <div class="print-only qr-code-placeholder">
-                                            <div class="qr-box"><div class="qr-mock">📱 Scan</div></div>
-                                        </div>
                                     </div>
                                 </div>
+                            
+                                <a href="gallery.html?year=2024" class="gallery-btn">
+                                    <span>📸 Galeria de 2024</span>
+                                    <span class="print-only qr-btn-code">
+                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mlacerdapt.github.io/joseroberto/gallery.html?year=2024" alt="QR Code Galeria" class="qr-code-img">
+                                    </span>
+                                </a>
                             </div>
                         </div>
                     </section>
@@ -448,7 +497,7 @@
                                     <h3 class="story-headline">"Os primeiros 10 anos de uma vida incrível"</h3>
                                     <p>Chegamos à marca de 10 anos! A primeira década completa de vida, e que privilégio enorme foi te acompanhar de pertinho em cada uma dessas etapas. Hoje você é um menino ativo, apaixonado por esportes, que adora inventar coisas e tem um coração gigante. Mal posso esperar pelas próximas aventuras.</p>
                                     <p class="handwritten-note">"Parabéns, meu sobrinho, parceiro e eterno aventureiro!"</p>
-                                    <a href="gallery.html?year=2025" class="gallery-btn online-only">📸 Galeria de 2025</a>
+                                    
                                 </div>
 
                                 <div class="story-media">
@@ -457,11 +506,15 @@
                                         <img src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?q=80&w=800" alt="Aniversário de 10 anos" class="story-photo">
                                         <div class="polaroid-caption">10 Anos de muita festa em 2025</div>
                                         <div class="play-overlay online-only">▶️ Assistir Vídeo</div>
-                                        <div class="print-only qr-code-placeholder">
-                                            <div class="qr-box"><div class="qr-mock">📱 Scan</div></div>
-                                        </div>
                                     </div>
                                 </div>
+                            
+                                <a href="gallery.html?year=2025" class="gallery-btn">
+                                    <span>📸 Galeria de 2025</span>
+                                    <span class="print-only qr-btn-code">
+                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mlacerdapt.github.io/joseroberto/gallery.html?year=2025" alt="QR Code Galeria" class="qr-code-img">
+                                    </span>
+                                </a>
                             </div>
                         </div>
                     </section>

@@ -694,6 +694,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+    width: 100%;
 }
 
 /* Moldura Polaroid para Fotos/Vídeos (Estilo Collage Scrapbook) */

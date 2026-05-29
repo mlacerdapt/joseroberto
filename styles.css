@@ -803,6 +803,13 @@ body {
     height: 100%;
     pointer-events: none;
     z-index: 1;
+    opacity: 0.15; /* Tornar a linha super sutil para não interferir na leitura */
+    transition: opacity 0.3s ease;
+}
+
+.scrapbook-path-svg path {
+    vector-effect: non-scaling-stroke; /* Mantém a espessura da linha constante sem esticar */
+    stroke-width: 1.5px !important;
 }
 
 /* Modal de Vídeo Interativo (Premium) */

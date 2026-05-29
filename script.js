@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const videoModalBackdrop = document.getElementById("videoModalBackdrop");
     const closeModalBtn = document.getElementById("closeModal");
     const modalIframe = document.getElementById("modalIframe");
-    const polaroidCards = document.querySelectorAll(".media-frame.polaroid-card");
+    const polaroidCards = document.querySelectorAll(".media-frame, .polaroid-small");
 
     // Estado local
     let scale = 1.0;

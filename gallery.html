@@ -122,8 +122,8 @@
             const urlParams = new URLSearchParams(window.location.search);
             const year = parseInt(urlParams.get("year")) || 2016;
             
-            // Valida ano (entre 2016 e 2025)
-            const validYear = Math.max(2016, Math.min(2025, year));
+            // Valida ano (entre 2016 e 2026)
+            const validYear = Math.max(2016, Math.min(2026, year));
             const yearIndex = validYear - 2015; // 2016 -> 1, 2017 -> 2...
 
             // Elementos DOM
@@ -167,7 +167,8 @@
                 2022: { age: "6 a 7 anos", desc: "O Estádio e a Emoção - O amor pelo futebol gigante" },
                 2023: { age: "7 a 8 anos", desc: "Acelerando a Imaginação - Sonhando com o asfalto" },
                 2024: { age: "8 a 9 anos", desc: "O Grande Inventor - Mãos à obra e engenhos de papelão" },
-                2025: { age: "9 a 10 anos", desc: "Celebrando uma Década - Dez anos de aventuras incríveis" }
+                2025: { age: "9 a 10 anos", desc: "Celebrando uma Década - Dez anos de aventuras incríveis" },
+                2026: { age: "10 anos", desc: "O Grande Marco dos 10 anos - Porto Seguro, impressões 3D e novos desafios!" }
             };
 
             const meta = yearMetadata[validYear] || { age: "10 Anos", desc: "Álbum de Aventuras" };

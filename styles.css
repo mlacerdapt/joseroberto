@@ -2128,3 +2128,140 @@ body {
     }
 }
 
+/* ==========================================================================
+   ESTILOS DE GRADE DE MINI POLAROIDS (COLLAGE STYLE)
+   ========================================================================== */
+
+.story-media-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.polaroid-small {
+    position: relative;
+    background: #fff;
+    padding: 6px 6px 20px 6px !important;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05), 0 8px 15px rgba(0,0,0,0.1);
+    border-radius: 1px;
+    width: 110px;
+    flex-shrink: 0;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.polaroid-small img {
+    width: 100%;
+    height: 75px !important;
+    object-fit: cover;
+    border-radius: 1px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.polaroid-small .polaroid-caption {
+    font-family: var(--font-handwritten);
+    font-size: 0.9rem !important;
+    font-weight: bold;
+    color: #2b3531;
+    text-align: center;
+    position: absolute;
+    bottom: 3px;
+    left: 4px;
+    right: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.polaroid-small .tape {
+    position: absolute;
+    width: 45px;
+    height: 12px;
+    background-color: var(--tape-color);
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-3deg);
+    z-index: 15;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    backdrop-filter: blur(1px);
+}
+
+/* Rotações dinâmicas sorteadas para simular colagem manual no álbum */
+.polaroid-small:nth-child(even) {
+    transform: rotate(2.5deg);
+}
+
+.polaroid-small:nth-child(odd) {
+    transform: rotate(-3deg);
+}
+
+.polaroid-small:nth-child(3n) {
+    transform: rotate(1.5deg);
+}
+
+.polaroid-small:nth-child(4n) {
+    transform: rotate(-2deg);
+}
+
+.polaroid-small:hover {
+    transform: scale(1.15) rotate(0deg) !important;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1), 0 15px 30px rgba(0,0,0,0.25);
+    z-index: 50;
+}
+
+/* Garante que os estilos do small polaroid e fitas fiquem bonitos e não quebrem na impressão */
+@media print {
+    .story-media-grid {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 12px !important;
+        margin-top: 10px !important;
+        break-inside: avoid !important;
+    }
+    
+    .polaroid-small {
+        background: #fff !important;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.15) !important;
+        transform: rotate(1.5deg) !important; /* Rotação fixa suave na impressão */
+        width: 100px !important; /* Tamanho reduzido para garantir que caiba perfeitamente no A4 físico */
+        padding: 5px 5px 16px 5px !important;
+        break-inside: avoid !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    .polaroid-small:nth-child(even) {
+        transform: rotate(1.5deg) !important;
+    }
+    
+    .polaroid-small:nth-child(odd) {
+        transform: rotate(-1.5deg) !important;
+    }
+
+    .polaroid-small img {
+        height: 65px !important;
+        object-fit: cover !important;
+    }
+
+    .polaroid-small .polaroid-caption {
+        font-size: 8pt !important;
+        bottom: 2px !important;
+    }
+
+    .polaroid-small .tape {
+        background-color: rgba(220, 190, 140, 0.6) !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+

@@ -1341,7 +1341,7 @@ body {
     }
 
     .story-photo {
-        height: 120px !important;
+        height: 160px !important;
     }
 
     .sticker {
@@ -2351,38 +2351,38 @@ body {
     /* Calibração de Tamanhos Físicos das Grades de Polaroid na Impressão */
     .story-media-grid.grid-1-3 .polaroid-small {
         width: auto !important;
-        min-width: 44mm !important;
-        max-width: 58mm !important;
+        min-width: 50mm !important;
+        max-width: 68mm !important;
         padding: 2mm 2mm 9mm !important;
     }
     .story-media-grid.grid-1-3 .polaroid-small img,
     .story-media-grid.grid-1-3 .polaroid-small video {
-        max-height: 40mm !important;
-        max-width: 54mm !important;
+        max-height: 52mm !important;
+        max-width: 65mm !important;
     }
 
     .story-media-grid.grid-4-5 .polaroid-small {
         width: auto !important;
-        min-width: 36mm !important;
-        max-width: 48mm !important;
+        min-width: 40mm !important;
+        max-width: 56mm !important;
         padding: 1.8mm 1.8mm 8mm !important;
     }
     .story-media-grid.grid-4-5 .polaroid-small img,
     .story-media-grid.grid-4-5 .polaroid-small video {
-        max-height: 32mm !important;
-        max-width: 44mm !important;
+        max-height: 42mm !important;
+        max-width: 52mm !important;
     }
 
     .story-media-grid.grid-6-plus .polaroid-small {
         width: auto !important;
-        min-width: 28mm !important;
-        max-width: 40mm !important;
+        min-width: 30mm !important;
+        max-width: 42mm !important;
         padding: 1.5mm 1.5mm 7mm !important;
     }
     .story-media-grid.grid-6-plus .polaroid-small img,
     .story-media-grid.grid-6-plus .polaroid-small video {
-        max-height: 28mm !important;
-        max-width: 37mm !important;
+        max-height: 33mm !important;
+        max-width: 39mm !important;
     }
     .story-media-grid.grid-6-plus .polaroid-small .polaroid-caption {
         font-size: 8pt !important;

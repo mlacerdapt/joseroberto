@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=1.2">
 </head>
 <body class="gallery-page-body">
 
@@ -29,10 +29,14 @@
             </div>
             
             <div class="gallery-header-center">
-                <div class="gallery-title-box">
-                    <span class="gallery-vintage-tag" id="ageBadge">0 a 0 anos</span>
-                    <h1 class="gallery-main-title">Galeria de Lembranças <span id="galleryYear">2016</span></h1>
-                    <p class="gallery-subtitle" id="gallerySubtitle">Lembranças incríveis deste ano especial</p>
+                <div class="gallery-title-container">
+                    <a href="#" id="prevYearLink" class="gallery-nav-btn prev-btn">◀ 0000</a>
+                    <div class="gallery-title-box">
+                        <span class="gallery-vintage-tag" id="ageBadge">0 a 0 anos</span>
+                        <h1 class="gallery-main-title">Galeria de Lembranças <span id="galleryYear">2016</span></h1>
+                        <p class="gallery-subtitle" id="gallerySubtitle">Lembranças incríveis deste ano especial</p>
+                    </div>
+                    <a href="#" id="nextYearLink" class="gallery-nav-btn next-btn">0000 ▶</a>
                 </div>
             </div>
             
@@ -100,7 +104,8 @@
         <div class="lightbox-content">
             <div class="lightbox-polaroid">
                 <div class="lightbox-image-container">
-                    <img id="lightboxImg" src="" alt="Imagem Ampliada">
+                    <img id="lightboxImg" src="" alt="Imagem Ampliada" style="display: block;">
+                    <video id="lightboxVideo" src="" controls style="display: none; width: 100%; max-height: 70vh; border-radius: 2px;"></video>
                 </div>
                 <div class="lightbox-footer">
                     <span class="lightbox-caption" id="lightboxCaption">Foto 1</span>
@@ -116,6 +121,7 @@
     </div>
 
     <!-- Scripts de Lógica da Galeria -->
+    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             // 1. Extrai o ano dos parâmetros da URL
@@ -135,6 +141,8 @@
             const galleryLoadingEl = document.getElementById("galleryLoading");
             const galleryEmptyEl = document.getElementById("galleryEmpty");
             const galleryGridEl = document.getElementById("galleryGrid");
+            const prevYearLinkEl = document.getElementById("prevYearLink");
+            const nextYearLinkEl = document.getElementById("nextYearLink");
             
             const actionBarEl = document.getElementById("actionBar");
             const selectedCountEl = document.getElementById("selectedCount");
@@ -143,6 +151,7 @@
 
             const lightboxEl = document.getElementById("lightbox");
             const lightboxImgEl = document.getElementById("lightboxImg");
+            const lightboxVideoEl = document.getElementById("lightboxVideo");
             const lightboxCaptionEl = document.getElementById("lightboxCaption");
             const lightboxCounterEl = document.getElementById("lightboxCounter");
             const lightboxSelectBtn = document.getElementById("lightboxSelectBtn");
@@ -155,6 +164,23 @@
             galleryYearEl.textContent = validYear;
             backLinkEl.href = `index.html#wrapper-page-year-${yearIndex}`;
             folderPathDisplayEl.textContent = `photos/${validYear}/`;
+
+            // Configurar botões de navegação de ano (anterior / seguinte)
+            if (validYear > 2016) {
+                prevYearLinkEl.href = `gallery.html?year=${validYear - 1}`;
+                prevYearLinkEl.textContent = `◀ ${validYear - 1}`;
+                prevYearLinkEl.style.display = "inline-flex";
+            } else {
+                prevYearLinkEl.style.display = "none";
+            }
+
+            if (validYear < 2026) {
+                nextYearLinkEl.href = `gallery.html?year=${validYear + 1}`;
+                nextYearLinkEl.textContent = `${validYear + 1} ▶`;
+                nextYearLinkEl.style.display = "inline-flex";
+            } else {
+                nextYearLinkEl.style.display = "none";
+            }
 
             // Mapeamento de idades e histórias da capa
             const yearMetadata = {
@@ -184,48 +210,112 @@
             let activeLightboxIndex = 0;
 
             // ==========================================================================
-            // 2. SISTEMA DE VERIFICAÇÃO DE IMAGEM DYNAMIC (CLIENT-SIDE ERROR HANDLERS)
+            // 2. SISTEMA DE VERIFICAÇÃO DE ARQUIVOS DYNAMIC (CLIENT-SIDE ERROR HANDLERS)
             // ==========================================================================
             
-            function checkImageExists(url) {
+            function checkFileExists(url, isVideo = false) {
+                if (window.location.protocol.startsWith('http')) {
+                    return fetch(url, { method: 'HEAD' })
+                        .then(res => {
+                            if (res.ok) return true;
+                            if (res.status === 405 || res.status === 501) {
+                                return checkFileExistsFallback(url, isVideo);
+                            }
+                            return false;
+                        })
+                        .catch(() => checkFileExistsFallback(url, isVideo));
+                }
+                return checkFileExistsFallback(url, isVideo);
+            }
+
+            function checkFileExistsFallback(url, isVideo) {
                 return new Promise((resolve) => {
-                    const img = new Image();
-                    img.onload = () => resolve(true);
-                    img.onerror = () => resolve(false);
-                    img.src = url;
+                    if (isVideo) {
+                        const video = document.createElement('video');
+                        video.onloadedmetadata = () => resolve(true);
+                        video.onerror = () => resolve(false);
+                        video.src = url;
+                    } else {
+                        const img = new Image();
+                        img.onload = () => resolve(true);
+                        img.onerror = () => resolve(false);
+                        img.src = url;
+                    }
                 });
             }
 
+            async function handleHeicImage(img, url) {
+                if (typeof heic2any === 'undefined') {
+                    console.warn("heic2any library is not loaded. HEIC image might not render on some browsers.");
+                    img.src = url;
+                    return;
+                }
+                try {
+                    img.style.opacity = "0.5";
+                    const response = await fetch(url);
+                    const blob = await response.blob();
+                    const conversionResult = await heic2any({
+                        blob: blob,
+                        toType: "image/jpeg",
+                        quality: 0.7
+                    });
+                    const blobUrl = URL.createObjectURL(conversionResult);
+                    img.src = blobUrl;
+                    img.style.opacity = "1";
+                } catch (e) {
+                    console.error("HEIC conversion failed:", e);
+                    img.src = url;
+                    img.style.opacity = "1";
+                }
+            }
+
             async function scanAndLoadPhotos() {
-                const extensions = ["jpg", "jpeg", "png", "webp", "JPG", "JPEG", "PNG", "WEBP"];
+                const imgExtensions = ["jpg", "jpeg", "png", "webp", "JPG", "JPEG", "PNG", "WEBP", "heic", "HEIC"];
+                const videoExtensions = ["mp4", "webm", "mov", "MP4", "WEBM", "MOV"];
+                const allExtensions = [...videoExtensions, ...imgExtensions];
                 let index = 1;
                 let foundAny = false;
+                let consecutiveMisses = 0;
                 
-                // Procuramos até 60 fotos (um limite seguro)
-                while (index <= 60) {
+                // Procuramos até 60 fotos/vídeos (um limite seguro)
+                while (index <= 60 && consecutiveMisses < 15) {
                     let foundForIndex = false;
                     let matchedUrl = "";
                     
-                    // Testa cada extensão sequencialmente
-                    for (const ext of extensions) {
+                    // Testa todas as extensões em paralelo para o índice atual
+                    const promises = allExtensions.map(async (ext) => {
                         const testUrl = `photos/${validYear}/${index}.${ext}`;
-                        const exists = await checkImageExists(testUrl);
-                        if (exists) {
-                            matchedUrl = testUrl;
+                        const isVideo = videoExtensions.includes(ext);
+                        const exists = await checkFileExists(testUrl, isVideo);
+                        return { ext, exists, url: testUrl };
+                    });
+                    
+                    const results = await Promise.all(promises);
+                    
+                    // Prioridade 1: Vídeos
+                    const matchedVideo = results.find(r => videoExtensions.includes(r.ext) && r.exists);
+                    if (matchedVideo) {
+                        matchedUrl = matchedVideo.url;
+                        foundForIndex = true;
+                    } else {
+                        // Prioridade 2: Imagens
+                        const matchedImg = results.find(r => imgExtensions.includes(r.ext) && r.exists);
+                        if (matchedImg) {
+                            matchedUrl = matchedImg.url;
                             foundForIndex = true;
-                            break;
                         }
                     }
                     
                     if (!foundForIndex) {
-                        // Não há mais fotos sequenciais para este ano, encerra a busca
-                        break;
+                        consecutiveMisses++;
+                    } else {
+                        consecutiveMisses = 0;
+                        // Armazena a imagem/vídeo encontrada
+                        loadedImages.push(matchedUrl);
+                        addPhotoToGrid(matchedUrl, index);
+                        foundAny = true;
                     }
                     
-                    // Armazena a imagem encontrada
-                    loadedImages.push(matchedUrl);
-                    addPhotoToGrid(matchedUrl, index);
-                    foundAny = true;
                     index++;
                 }
 
@@ -247,6 +337,7 @@
             function addPhotoToGrid(url, index) {
                 const filename = url.substring(url.lastIndexOf("/") + 1);
                 const isSelected = selectedPhotos.includes(filename);
+                const isVideo = url.match(/\.(mp4|webm|mov)$/i);
                 
                 // Sorteia uma leve rotação para dar um clima real de Scrapbook/Mural
                 const rotation = (Math.random() * 6 - 3).toFixed(1);
@@ -257,10 +348,21 @@
                 card.setAttribute("data-filename", filename);
                 card.setAttribute("data-index", index - 1);
                 
+                let mediaHtml = '';
+                const isHeic = url.match(/\.heic$/i);
+                if (isVideo) {
+                    mediaHtml = `
+                        <video src="${url}" class="gallery-video-item" muted playsinline loop></video>
+                        <div class="gallery-video-badge">▶</div>
+                    `;
+                } else {
+                    mediaHtml = `<img src="${isHeic ? '' : url}" alt="Foto ${index}" loading="lazy" class="gallery-img-element">`;
+                }
+
                 card.innerHTML = `
                     <div class="gallery-tape"></div>
                     <div class="gallery-photo-container">
-                        <img src="${url}" alt="Foto ${index}" loading="lazy">
+                        ${mediaHtml}
                         <div class="gallery-select-badge">❤️</div>
                     </div>
                     <div class="gallery-polaroid-footer">
@@ -270,6 +372,25 @@
                         </div>
                     </div>
                 `;
+
+                if (!isVideo && isHeic) {
+                    const imgEl = card.querySelector(".gallery-img-element");
+                    if (imgEl) {
+                        handleHeicImage(imgEl, url);
+                    }
+                }
+
+                // Adiciona hover play/pause preview para vídeos
+                if (isVideo) {
+                    const videoEl = card.querySelector("video");
+                    card.addEventListener("mouseenter", () => {
+                        videoEl.play().catch(() => {});
+                    });
+                    card.addEventListener("mouseleave", () => {
+                        videoEl.pause();
+                        videoEl.currentTime = 0;
+                    });
+                }
 
                 // Evento 1: Clique na foto ou caption (abre Lightbox)
                 const imgContainer = card.querySelector(".gallery-photo-container");
@@ -401,6 +522,8 @@
             function closeLightbox() {
                 lightboxEl.classList.remove("active");
                 document.body.style.overflow = ""; // Reativa scroll
+                lightboxVideoEl.pause();
+                lightboxVideoEl.src = "";
             }
 
             function updateLightboxContent() {
@@ -408,11 +531,27 @@
                 if (!imgUrl) return;
                 
                 const filename = imgUrl.substring(imgUrl.lastIndexOf("/") + 1);
+                const isVideo = imgUrl.match(/\.(mp4|webm|mov)$/i);
+
+                if (isVideo) {
+                    lightboxImgEl.style.display = "none";
+                    lightboxVideoEl.src = imgUrl;
+                    lightboxVideoEl.style.display = "block";
+                    lightboxVideoEl.play().catch(() => {});
+                    lightboxCaptionEl.textContent = `Vídeo ${activeLightboxIndex + 1} (${filename})`;
+                } else {
+                    lightboxVideoEl.style.display = "none";
+                    lightboxVideoEl.src = "";
+                    if (imgUrl.match(/\.heic$/i)) {
+                        handleHeicImage(lightboxImgEl, imgUrl);
+                    } else {
+                        lightboxImgEl.src = imgUrl;
+                    }
+                    lightboxImgEl.style.display = "block";
+                    lightboxCaptionEl.textContent = `Foto ${activeLightboxIndex + 1} (${filename})`;
+                }
                 
-                lightboxImgEl.src = imgUrl;
-                lightboxCaptionEl.textContent = `Foto ${activeLightboxIndex + 1} (${filename})`;
                 lightboxCounterEl.textContent = `${activeLightboxIndex + 1} de ${loadedImages.length}`;
-                
                 updateLightboxSelectButtonState();
             }
 
@@ -481,5 +620,7 @@
             scanAndLoadPhotos();
         });
     </script>
+    <!-- Script de recarregamento automático ao atualizar código -->
+    <script src="live-reload.js"></script>
 </body>
 </html>

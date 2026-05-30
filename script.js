@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const videoModalBackdrop = document.getElementById("videoModalBackdrop");
     const closeModalBtn = document.getElementById("closeModal");
     const modalIframe = document.getElementById("modalIframe");
-    const polaroidCards = document.querySelectorAll(".media-frame, .polaroid-small");
+    const polaroidCards = document.querySelectorAll(".media-frame, .polaroid-small, .cover-photo-frame");
 
     // Estado local
     let scale = 1.0;
@@ -217,11 +217,26 @@ document.addEventListener("DOMContentLoaded", () => {
         modalIframe.src = ""; // Para o vídeo imediatamente
     }
 
-    // Clique nas Polaroids
+    // Clique nas Polaroids (Vídeos abrem o modal; fotos normais navegam para a galeria)
     polaroidCards.forEach(card => {
         card.addEventListener("click", () => {
             const videoUrl = card.getAttribute("data-video-url");
-            openVideoModal(videoUrl);
+            if (videoUrl) {
+                openVideoModal(videoUrl);
+            } else {
+                // Tenta obter o ano diretamente da moldura (ex: capa) ou da seção correspondente (páginas)
+                let year = card.getAttribute("data-year");
+                if (!year) {
+                    const section = card.closest("section");
+                    if (section) {
+                        year = section.getAttribute("data-year");
+                    }
+                }
+                
+                if (year) {
+                    window.location.href = `gallery.html?year=${year}`;
+                }
+            }
         });
     });
 
@@ -280,7 +295,158 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // ==========================================================================
-    // 6. INICIALIZAÇÃO DO ESTADO VISUAL
+    // 6. VERIFICAÇÃO AUTOMÁTICA DE VÍDEOS EM MOLDURAS (SUBSTITUI IMAGENS QUEBRADAS)
+    // ==========================================================================
+    
+    function checkFileExists(url, isVideo = false) {
+        if (window.location.protocol.startsWith('http')) {
+            return fetch(url, { method: 'HEAD' })
+                .then(res => {
+                    if (res.ok) return true;
+                    if (res.status === 405 || res.status === 501) {
+                        return checkFileExistsFallback(url, isVideo);
+                    }
+                    return false;
+                })
+                .catch(() => checkFileExistsFallback(url, isVideo));
+        }
+        return checkFileExistsFallback(url, isVideo);
+    }
+
+    function checkFileExistsFallback(url, isVideo) {
+        return new Promise((resolve) => {
+            if (isVideo) {
+                const video = document.createElement('video');
+                video.onloadedmetadata = () => resolve(true);
+                video.onerror = () => resolve(false);
+                video.src = url;
+            } else {
+                const img = new Image();
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(false);
+                img.src = url;
+            }
+        });
+    }
+
+    async function handleHeicImage(img, url) {
+        if (typeof heic2any === 'undefined') {
+            console.warn("heic2any library is not loaded. HEIC image might not render on some browsers.");
+            img.src = url;
+            return;
+        }
+        try {
+            img.style.opacity = "0.5";
+            const response = await fetch(url);
+            const blob = await response.blob();
+            const conversionResult = await heic2any({
+                blob: blob,
+                toType: "image/jpeg",
+                quality: 0.7
+            });
+            const blobUrl = URL.createObjectURL(conversionResult);
+            img.src = blobUrl;
+            img.style.opacity = "1";
+        } catch (e) {
+            console.error("HEIC conversion failed:", e);
+            img.src = url;
+            img.style.opacity = "1";
+        }
+    }
+
+    const storyPhotos = document.querySelectorAll(".story-photo, .cover-photo");
+    storyPhotos.forEach(img => {
+        const originalSrc = img.src;
+        if (!originalSrc) return;
+
+        const isVideoFile = originalSrc.match(/\.(mp4|webm|mov)$/i);
+
+        const replaceWithVideo = (videoUrl) => {
+            if (img.dataset.replaced) return;
+            img.dataset.replaced = "true";
+
+            const video = document.createElement("video");
+            video.src = videoUrl;
+            video.className = img.className;
+            video.autoplay = true;
+            video.loop = true;
+            video.muted = true;
+            video.playsinline = true;
+            
+            if (img.style.cssText) video.style.cssText = img.style.cssText;
+            if (img.alt) video.setAttribute("aria-label", img.alt);
+            
+            img.parentNode.replaceChild(video, img);
+
+            // Atualiza data-video-url no card pai para permitir abrir o modal de vídeo no clique
+            const card = video.closest(".media-frame, .polaroid-small, .cover-photo-frame");
+            if (card) {
+                card.setAttribute("data-video-url", videoUrl);
+            }
+
+            // Garante a reprodução (resolve restrições de autoplay do Safari/Chrome)
+            video.play().catch(() => {
+                const playOnInteraction = () => {
+                    video.play().catch(() => {});
+                    document.removeEventListener("click", playOnInteraction);
+                    document.removeEventListener("touchstart", playOnInteraction);
+                };
+                document.addEventListener("click", playOnInteraction);
+                document.addEventListener("touchstart", playOnInteraction);
+            });
+        };
+
+        if (isVideoFile) {
+            replaceWithVideo(originalSrc);
+        } else {
+            const handleImgError = () => {
+                const basePath = originalSrc.substring(0, originalSrc.lastIndexOf("."));
+                const imgExts = ["jpg", "jpeg", "png", "JPG", "JPEG", "PNG", "webp", "WEBP", "heic", "HEIC"];
+                const videoExts = ["mp4", "mov", "webm", "MP4", "MOV", "WEBM"];
+                
+                async function tryFindAlternative() {
+                    // 1. Tentar outras extensões de imagem
+                    for (const ext of imgExts) {
+                        if (originalSrc.endsWith("." + ext)) continue;
+                        const imgUrl = `${basePath}.${ext}`;
+                        const exists = await checkFileExists(imgUrl, false);
+                        if (exists) {
+                            if (imgUrl.match(/\.heic$/i)) {
+                                handleHeicImage(img, imgUrl);
+                            } else {
+                                img.src = imgUrl;
+                            }
+                            return;
+                        }
+                    }
+                    
+                    // 2. Tentar extensões de vídeo
+                    for (const ext of videoExts) {
+                        const videoUrl = `${basePath}.${ext}`;
+                        const exists = await checkFileExists(videoUrl, true);
+                        if (exists) {
+                            replaceWithVideo(videoUrl);
+                            return;
+                        }
+                    }
+
+                    // Se não encontrou nenhuma alternativa de imagem ou vídeo, removemos o ícone de quebrado
+                    img.src = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%3E%3C/svg%3E";
+                    img.classList.add("photo-placeholder");
+                }
+                tryFindAlternative();
+            };
+
+            if (img.complete && img.naturalWidth === 0) {
+                handleImgError();
+            } else {
+                img.addEventListener("error", handleImgError);
+            }
+        }
+    });
+
+    // ==========================================================================
+    // 7. INICIALIZAÇÃO DO ESTADO VISUAL
     // ==========================================================================
     
     // Por padrão no desktop começa no Ajustar Altura. Em telas de celular começa no Ajustar Largura.

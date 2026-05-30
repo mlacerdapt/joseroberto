@@ -2,3 +2,5 @@
 Thumbs.db
 .vscode/
 .idea/
+scratch/
+*.code-workspace

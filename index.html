@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=1.2">
 </head>
 <body>
 
@@ -85,7 +85,7 @@
                             <div class="cover-journey-container">
                                 <!-- Linha conectora SVG sinuosa (Cubic Bezier) -->
                                 <svg class="cover-journey-line" viewBox="0 0 704 600" preserveAspectRatio="none">
-                                    <path d="M 230,180 C 700,50 0,550 470,420" fill="none" stroke="var(--accent-orange)" stroke-width="2.5" stroke-dasharray="6,6" />
+                                    <path d="M 280,120 C 520,100 180,520 420,480" fill="none" stroke="var(--accent-orange)" stroke-width="2.5" stroke-dasharray="6,6" />
                                 </svg>
 
                                 <!-- Adesivos dispostos ao longo da jornada -->
@@ -95,16 +95,16 @@
                                 <div class="sticker journey-sticker sticker-handcraft" title="Pequeno grande inventor!">🛠️</div>
 
                                 <!-- Polaroid 2016 (Início) -->
-                                <div class="cover-photo-frame polaroid-card cover-polaroid-2016">
+                                <div class="cover-photo-frame polaroid-card cover-polaroid-2016" data-year="2016" style="cursor: pointer;">
                                     <div class="tape tape-top-left"></div>
-                                    <img src="photos/cover_2016.png" alt="José Roberto bebê - 2016" class="cover-photo">
+                                    <img src="photos/cover_2016.jpg" alt="José Roberto bebê - 2016" class="cover-photo">
                                     <div class="polaroid-caption">2016: O início da jornada!</div>
                                 </div>
 
                                 <!-- Polaroid 2026 (10 Anos) -->
-                                <div class="cover-photo-frame polaroid-card cover-polaroid-2026">
+                                <div class="cover-photo-frame polaroid-card cover-polaroid-2026" data-year="2026" style="cursor: pointer;">
                                     <div class="tape tape-top-right"></div>
-                                    <img src="photos/cover_2026.png" alt="José Roberto 10 anos - 2026" class="cover-photo">
+                                    <img src="photos/cover_2026.jpg" alt="José Roberto 10 anos - 2026" class="cover-photo">
                                     <div class="polaroid-caption">2026: 10 anos de aventuras!</div>
                                 </div>
                             </div>
@@ -143,7 +143,7 @@
 
                                 <div class="story-media">
                                     <svg class="scrapbook-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M10,40 Q30,10 50,45 T90,55" fill="none" stroke="#d97706" stroke-dasharray="3,3" stroke-width="0.8"/></svg>
-                                    <div class="story-media-grid">
+                                    <div class="story-media-grid grid-1-3">
                                         <div class="polaroid-small" title="Clique para ver!">
                                             <div class="tape"></div>
                                             <img src="photos/2016/1.jpg" alt="Susto em Campinas" class="story-photo">
@@ -198,7 +198,7 @@
 
                                 <div class="story-media">
                                     <svg class="scrapbook-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M5,20 Q45,30 65,10 T95,50" fill="none" stroke="#3d6a45" stroke-dasharray="3,3" stroke-width="0.8"/></svg>
-                                    <div class="story-media-grid">
+                                    <div class="story-media-grid grid-4-5">
                                         <div class="polaroid-small" title="Clique para ver!">
                                             <div class="tape"></div>
                                             <img src="photos/2017/1.jpg" alt="Zoológico" class="story-photo">
@@ -240,7 +240,7 @@
 
                 <!-- ================= PÁGINA 4: ANO 2018 (2 a 3 anos) ================= -->
                 <div class="page-wrapper" id="wrapper-page-year-3" data-page-index="4">
-                    <section class="album-page story-page" id="page-year-3" data-year="2018">
+                    <section class="album-page story-page story-page-dense" id="page-year-3" data-year="2018">
                         <div class="page-content">
                             
                             
@@ -266,7 +266,7 @@
 
                                 <div class="story-media">
                                     <svg class="scrapbook-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M90,10 Q60,35 40,15 T10,60" fill="none" stroke="#2563eb" stroke-dasharray="3,3" stroke-width="0.8"/></svg>
-                                    <div class="story-media-grid">
+                                    <div class="story-media-grid grid-6-plus">
                                         <div class="polaroid-small" title="Clique para ver!">
                                             <div class="tape"></div>
                                             <img src="photos/2018/1.jpg" alt="Quarto" class="story-photo">
@@ -323,7 +323,7 @@
 
                 <!-- ================= PÁGINA 5: ANO 2019 (3 a 4 anos) ================= -->
                 <div class="page-wrapper" id="wrapper-page-year-4" data-page-index="5">
-                    <section class="album-page story-page" id="page-year-4" data-year="2019">
+                    <section class="album-page story-page story-page-dense" id="page-year-4" data-year="2019">
                         <div class="page-content">
                             
                             
@@ -347,7 +347,7 @@
 
                                 <div class="story-media">
                                     <svg class="scrapbook-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M10,80 Q50,90 40,40 T90,20" fill="none" stroke="#d97706" stroke-dasharray="3,3" stroke-width="0.8"/></svg>
-                                    <div class="story-media-grid">
+                                    <div class="story-media-grid grid-6-plus">
                                         <div class="polaroid-small" title="Clique para ver!">
                                             <div class="tape"></div>
                                             <img src="photos/2019/1.jpg" alt="Escola" class="story-photo">
@@ -417,7 +417,7 @@
 
                                 <div class="story-media">
                                     <svg class="scrapbook-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M10,20 Q50,0 60,60 T90,80" fill="none" stroke="#3d6a45" stroke-dasharray="3,3" stroke-width="0.8"/></svg>
-                                    <div class="story-media-grid">
+                                    <div class="story-media-grid grid-4-5">
                                         <div class="polaroid-small" title="Clique para ver!">
                                             <div class="tape"></div>
                                             <img src="photos/2020/1.jpg" alt="Beliche" class="story-photo">
@@ -479,11 +479,16 @@
 
                                 <div class="story-media">
                                     <svg class="scrapbook-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M5,40 Q50,60 50,15 T95,60" fill="none" stroke="#2563eb" stroke-dasharray="3,3" stroke-width="0.8"/></svg>
-                                    <div class="story-media-grid">
+                                    <div class="story-media-grid grid-1-3">
                                         <div class="polaroid-small" title="Clique para ver!">
                                             <div class="tape"></div>
                                             <img src="photos/2021/1.jpg" alt="Gaiola" class="story-photo">
                                             <div class="polaroid-caption">Primeira Gaiola</div>
+                                        </div>
+                                        <div class="polaroid-small" title="Clique para ver!">
+                                            <div class="tape"></div>
+                                            <img src="photos/2021/3.mp4" alt="Vídeo Gaiola" class="story-photo">
+                                            <div class="polaroid-caption">Na Gaiola</div>
                                         </div>
                                         <div class="polaroid-small" title="Clique para ver!">
                                             <div class="tape"></div>
@@ -528,7 +533,7 @@
 
                                 <div class="story-media">
                                     <svg class="scrapbook-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M10,80 Q30,40 60,60 T90,20" fill="none" stroke="#d97706" stroke-dasharray="3,3" stroke-width="0.8"/></svg>
-                                    <div class="story-media-grid">
+                                    <div class="story-media-grid grid-4-5">
                                         <div class="polaroid-small" title="Clique para ver!">
                                             <div class="tape"></div>
                                             <img src="photos/2022/1.jpg" alt="Judô" class="story-photo">
@@ -565,7 +570,7 @@
 
                 <!-- ================= PÁGINA 9: ANO 2023 (7 a 8 anos) ================= -->
                 <div class="page-wrapper" id="wrapper-page-year-8" data-page-index="9">
-                    <section class="album-page story-page" id="page-year-8" data-year="2023">
+                    <section class="album-page story-page story-page-dense" id="page-year-8" data-year="2023">
                         <div class="page-content">
                             
                             
@@ -591,7 +596,7 @@
 
                                 <div class="story-media">
                                     <svg class="scrapbook-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M5,15 Q35,45 65,30 T95,85" fill="none" stroke="#3d6a45" stroke-dasharray="3,3" stroke-width="0.8"/></svg>
-                                    <div class="story-media-grid">
+                                    <div class="story-media-grid grid-6-plus">
                                         <div class="polaroid-small" title="Clique para ver!">
                                             <div class="tape"></div>
                                             <img src="photos/2023/1.jpg" alt="Reencontro" class="story-photo">
@@ -648,7 +653,7 @@
 
                 <!-- ================= PÁGINA 10: ANO 2024 (8 a 9 anos) ================= -->
                 <div class="page-wrapper" id="wrapper-page-year-9" data-page-index="10">
-                    <section class="album-page story-page" id="page-year-9" data-year="2024">
+                    <section class="album-page story-page story-page-dense" id="page-year-9" data-year="2024">
                         <div class="page-content">
                             
                             
@@ -672,7 +677,7 @@
 
                                 <div class="story-media">
                                     <svg class="scrapbook-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M90,90 Q50,60 50,20 T10,10" fill="none" stroke="#2563eb" stroke-dasharray="3,3" stroke-width="0.8"/></svg>
-                                    <div class="story-media-grid">
+                                    <div class="story-media-grid grid-6-plus">
                                         <div class="polaroid-small" title="Clique para ver!">
                                             <div class="tape"></div>
                                             <img src="photos/2024/1.jpg" alt="Niver" class="story-photo">
@@ -719,7 +724,7 @@
 
                 <!-- ================= PÁGINA 11: ANO 2025 (9 a 10 anos) ================= -->
                 <div class="page-wrapper" id="wrapper-page-year-10" data-page-index="11">
-                    <section class="album-page story-page" id="page-year-10" data-year="2025">
+                    <section class="album-page story-page story-page-dense" id="page-year-10" data-year="2025">
                         <div class="page-content">
                             
                             
@@ -741,7 +746,7 @@
 
                                 <div class="story-media">
                                     <svg class="scrapbook-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M10,20 Q40,50 60,15 T95,45" fill="none" stroke="#d97706" stroke-dasharray="3,3" stroke-width="0.8"/></svg>
-                                    <div class="story-media-grid">
+                                    <div class="story-media-grid grid-6-plus">
                                         <div class="polaroid-small" title="Clique para ver!">
                                             <div class="tape"></div>
                                             <img src="photos/2025/1.jpg" alt="Bike" class="story-photo">
@@ -799,7 +804,7 @@
 
                                 <div class="story-media">
                                     <svg class="scrapbook-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M10,40 Q45,20 65,45 T95,65" fill="none" stroke="#2563eb" stroke-dasharray="3,3" stroke-width="0.8"/></svg>
-                                    <div class="story-media-grid">
+                                    <div class="story-media-grid grid-1-3">
                                         <div class="polaroid-small" title="Clique para ver!">
                                             <div class="tape"></div>
                                             <img src="photos/2026/1.jpg" alt="Porto Seguro" class="story-photo">
@@ -871,6 +876,9 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
     <script src="script.js"></script>
+    <!-- Script de recarregamento automático ao atualizar código -->
+    <script src="live-reload.js"></script>
 </body>
 </html>

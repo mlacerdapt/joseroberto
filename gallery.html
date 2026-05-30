@@ -272,21 +272,41 @@
             function getVideoThumbnail(videoUrl) {
                 return new Promise((resolve) => {
                     const video = document.createElement("video");
-                    video.src = videoUrl;
-                    video.crossOrigin = "anonymous";
+                    
+                    // Only set crossOrigin for external URLs
+                    if (videoUrl.startsWith("http") && !videoUrl.startsWith(window.location.origin)) {
+                        video.crossOrigin = "anonymous";
+                    }
+                    
                     video.muted = true;
                     video.playsInline = true;
                     video.preload = "auto";
+                    video.style.position = "fixed";
+                    video.style.top = "-9999px";
+                    video.style.left = "-9999px";
+                    video.style.width = "100px";
+                    video.style.height = "100px";
+                    video.style.opacity = "0";
+                    video.style.pointerEvents = "none";
                     
-                    let seeked = false;
+                    // Append to DOM to ensure WebKit/Safari decodes the frames correctly
+                    document.body.appendChild(video);
+                    
+                    let resolved = false;
+
+                    const cleanup = () => {
+                        if (video.parentNode) {
+                            video.parentNode.removeChild(video);
+                        }
+                    };
 
                     video.onloadedmetadata = () => {
                         video.currentTime = 0.1;
                     };
 
                     video.onseeked = () => {
-                        if (seeked) return;
-                        seeked = true;
+                        if (resolved) return;
+                        resolved = true;
                         try {
                             const canvas = document.createElement("canvas");
                             canvas.width = video.videoWidth || 640;
@@ -294,25 +314,31 @@
                             const ctx = canvas.getContext("2d");
                             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
                             const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+                            cleanup();
                             resolve(dataUrl);
                         } catch (e) {
                             console.error("Failed to draw video frame to canvas:", e);
+                            cleanup();
                             resolve(null);
                         }
                     };
 
-                    video.onerror = () => {
-                        console.error("Failed to load video for thumbnail:", videoUrl);
+                    video.onerror = (e) => {
+                        console.error("Failed to load video for thumbnail:", videoUrl, e);
+                        cleanup();
                         resolve(null);
                     };
 
                     // Safety fallback
                     setTimeout(() => {
-                        if (!seeked) {
+                        if (!resolved) {
+                            resolved = true;
+                            cleanup();
                             resolve(null);
                         }
-                    }, 3000);
+                    }, 5000);
 
+                    video.src = videoUrl;
                     video.load();
                 });
             }

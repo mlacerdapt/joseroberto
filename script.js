@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const videoModalBackdrop = document.getElementById("videoModalBackdrop");
     const closeModalBtn = document.getElementById("closeModal");
     const modalIframe = document.getElementById("modalIframe");
+    const modalVideo = document.getElementById("modalVideo");
     const polaroidCards = document.querySelectorAll(".media-frame, .polaroid-small, .cover-photo-frame");
 
     // Estado local
@@ -197,24 +198,50 @@ document.addEventListener("DOMContentLoaded", () => {
     function openVideoModal(url) {
         if (!url) return;
         
-        // Transforma URL normal do Youtube em formato embed se necessário
-        let embedUrl = url;
-        if (url.includes("watch?v=")) {
-            const videoId = url.split("v=")[1].split("&")[0];
-            embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-        } else if (!url.includes("?")) {
-            embedUrl = `${url}?autoplay=1`;
+        const isLocalVideo = url.match(/\.(mp4|webm|mov)$/i);
+        
+        if (isLocalVideo) {
+            modalIframe.style.display = "none";
+            modalIframe.src = "";
+            
+            modalVideo.src = url;
+            modalVideo.style.display = "block";
+            modalVideo.play().catch(() => {});
         } else {
-            embedUrl = `${url}&autoplay=1`;
+            if (modalVideo) {
+                modalVideo.style.display = "none";
+                modalVideo.src = "";
+                modalVideo.pause();
+            }
+            
+            // Transforma URL normal do Youtube em formato embed se necessário
+            let embedUrl = url;
+            if (url.includes("watch?v=")) {
+                const videoId = url.split("v=")[1].split("&")[0];
+                embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            } else if (!url.includes("?")) {
+                embedUrl = `${url}?autoplay=1`;
+            } else {
+                embedUrl = `${url}&autoplay=1`;
+            }
+            
+            modalIframe.src = embedUrl;
+            modalIframe.style.display = "block";
         }
         
-        modalIframe.src = embedUrl;
         videoModal.classList.add("active");
     }
 
     function closeVideoModal() {
         videoModal.classList.remove("active");
         modalIframe.src = ""; // Para o vídeo imediatamente
+        modalIframe.style.display = "none";
+        
+        if (modalVideo) {
+            modalVideo.pause();
+            modalVideo.src = "";
+            modalVideo.style.display = "none";
+        }
     }
 
     // Clique nas Polaroids (Vídeos abrem o modal; fotos normais navegam para a galeria)
@@ -329,6 +356,54 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    function getVideoThumbnail(videoUrl) {
+        return new Promise((resolve) => {
+            const video = document.createElement("video");
+            video.src = videoUrl;
+            video.crossOrigin = "anonymous";
+            video.muted = true;
+            video.playsInline = true;
+            video.preload = "auto";
+            
+            let seeked = false;
+
+            video.onloadedmetadata = () => {
+                video.currentTime = 0.1;
+            };
+
+            video.onseeked = () => {
+                if (seeked) return;
+                seeked = true;
+                try {
+                    const canvas = document.createElement("canvas");
+                    canvas.width = video.videoWidth || 640;
+                    canvas.height = video.videoHeight || 480;
+                    const ctx = canvas.getContext("2d");
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+                    resolve(dataUrl);
+                } catch (e) {
+                    console.error("Failed to draw video frame to canvas:", e);
+                    resolve(null);
+                }
+            };
+
+            video.onerror = () => {
+                console.error("Failed to load video for thumbnail:", videoUrl);
+                resolve(null);
+            };
+
+            // Safety fallback
+            setTimeout(() => {
+                if (!seeked) {
+                    resolve(null);
+                }
+            }, 3000);
+
+            video.load();
+        });
+    }
+
     async function handleHeicImage(img, url) {
         if (typeof heic2any === 'undefined') {
             console.warn("heic2any library is not loaded. HEIC image might not render on some browsers.");
@@ -361,39 +436,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const isVideoFile = originalSrc.match(/\.(mp4|webm|mov)$/i);
 
-        const replaceWithVideo = (videoUrl) => {
+        const replaceWithVideo = async (videoUrl) => {
             if (img.dataset.replaced) return;
             img.dataset.replaced = "true";
 
-            const video = document.createElement("video");
-            video.src = videoUrl;
-            video.className = img.className;
-            video.autoplay = true;
-            video.loop = true;
-            video.muted = true;
-            video.playsinline = true;
-            
-            if (img.style.cssText) video.style.cssText = img.style.cssText;
-            if (img.alt) video.setAttribute("aria-label", img.alt);
-            
-            img.parentNode.replaceChild(video, img);
-
-            // Atualiza data-video-url no card pai para permitir abrir o modal de vídeo no clique
-            const card = video.closest(".media-frame, .polaroid-small, .cover-photo-frame");
+            // Encontra o card pai (polaroid ou cover) para configurar a interatividade (modal ao clicar)
+            const card = img.closest(".media-frame, .polaroid-small, .cover-photo-frame");
             if (card) {
                 card.setAttribute("data-video-url", videoUrl);
+                card.classList.add("has-video");
+                
+                // Adiciona um selo de vídeo (Play) no card pai, se não existir
+                if (!card.querySelector(".gallery-video-badge")) {
+                    const badge = document.createElement("div");
+                    badge.className = "gallery-video-badge";
+                    badge.innerHTML = "▶";
+                    card.appendChild(badge);
+                }
             }
 
-            // Garante a reprodução (resolve restrições de autoplay do Safari/Chrome)
-            video.play().catch(() => {
-                const playOnInteraction = () => {
-                    video.play().catch(() => {});
-                    document.removeEventListener("click", playOnInteraction);
-                    document.removeEventListener("touchstart", playOnInteraction);
-                };
-                document.addEventListener("click", playOnInteraction);
-                document.addEventListener("touchstart", playOnInteraction);
-            });
+            img.classList.add("video-thumbnail-placeholder");
+
+            // Extrai o primeiro frame do vídeo como thumbnail
+            const thumbnailUrl = await getVideoThumbnail(videoUrl);
+            if (thumbnailUrl) {
+                img.src = thumbnailUrl;
+                img.classList.remove("video-thumbnail-placeholder");
+            } else {
+                img.src = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%3E%3C/svg%3E";
+            }
         };
 
         if (isVideoFile) {

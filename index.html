@@ -871,7 +871,8 @@
         <div class="video-modal-content">
             <button class="video-modal-close" id="closeModal" title="Fechar Vídeo">&times;</button>
             <div class="video-modal-iframe-container">
-                <iframe id="modalIframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe id="modalIframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: none;"></iframe>
+                <video id="modalVideo" src="" controls style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; background: #000;"></video>
             </div>
         </div>
     </div>

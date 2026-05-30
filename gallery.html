@@ -269,6 +269,54 @@
                 }
             }
 
+            function getVideoThumbnail(videoUrl) {
+                return new Promise((resolve) => {
+                    const video = document.createElement("video");
+                    video.src = videoUrl;
+                    video.crossOrigin = "anonymous";
+                    video.muted = true;
+                    video.playsInline = true;
+                    video.preload = "auto";
+                    
+                    let seeked = false;
+
+                    video.onloadedmetadata = () => {
+                        video.currentTime = 0.1;
+                    };
+
+                    video.onseeked = () => {
+                        if (seeked) return;
+                        seeked = true;
+                        try {
+                            const canvas = document.createElement("canvas");
+                            canvas.width = video.videoWidth || 640;
+                            canvas.height = video.videoHeight || 480;
+                            const ctx = canvas.getContext("2d");
+                            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                            const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+                            resolve(dataUrl);
+                        } catch (e) {
+                            console.error("Failed to draw video frame to canvas:", e);
+                            resolve(null);
+                        }
+                    };
+
+                    video.onerror = () => {
+                        console.error("Failed to load video for thumbnail:", videoUrl);
+                        resolve(null);
+                    };
+
+                    // Safety fallback
+                    setTimeout(() => {
+                        if (!seeked) {
+                            resolve(null);
+                        }
+                    }, 3000);
+
+                    video.load();
+                });
+            }
+
             async function scanAndLoadPhotos() {
                 const imgExtensions = ["jpg", "jpeg", "png", "webp", "JPG", "JPEG", "PNG", "WEBP", "heic", "HEIC"];
                 const videoExtensions = ["mp4", "webm", "mov", "MP4", "WEBM", "MOV"];
@@ -278,7 +326,7 @@
                 let consecutiveMisses = 0;
                 
                 // Procuramos até 60 fotos/vídeos (um limite seguro)
-                while (index <= 60 && consecutiveMisses < 5) {
+                while (index <= 60 && consecutiveMisses < 15) {
                     let foundForIndex = false;
                     let matchedUrl = "";
                     
@@ -347,12 +395,11 @@
                 card.style.transform = `rotate(${rotation}deg)`;
                 card.setAttribute("data-filename", filename);
                 card.setAttribute("data-index", index - 1);
-                
                 let mediaHtml = '';
                 const isHeic = url.match(/\.heic$/i);
                 if (isVideo) {
                     mediaHtml = `
-                        <video src="${url}" class="gallery-video-item" muted playsinline loop></video>
+                        <img src="" alt="Vídeo ${index}" loading="lazy" class="gallery-img-element video-thumbnail-placeholder">
                         <div class="gallery-video-badge">▶</div>
                     `;
                 } else {
@@ -380,15 +427,13 @@
                     }
                 }
 
-                // Adiciona hover play/pause preview para vídeos
                 if (isVideo) {
-                    const videoEl = card.querySelector("video");
-                    card.addEventListener("mouseenter", () => {
-                        videoEl.play().catch(() => {});
-                    });
-                    card.addEventListener("mouseleave", () => {
-                        videoEl.pause();
-                        videoEl.currentTime = 0;
+                    const imgEl = card.querySelector(".gallery-img-element");
+                    getVideoThumbnail(url).then(thumbnailUrl => {
+                        if (thumbnailUrl && imgEl) {
+                            imgEl.src = thumbnailUrl;
+                            imgEl.classList.remove("video-thumbnail-placeholder");
+                        }
                     });
                 }
 

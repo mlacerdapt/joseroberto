@@ -2494,7 +2494,10 @@ body {
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
-.gallery-polaroid-card:hover .gallery-video-badge {
+.gallery-polaroid-card:hover .gallery-video-badge,
+.polaroid-small:hover .gallery-video-badge,
+.media-frame:hover .gallery-video-badge,
+.cover-photo-frame:hover .gallery-video-badge {
     background-color: var(--accent-orange);
     transform: translate(-50%, -50%) scale(1.15);
 }
